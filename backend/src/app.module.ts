@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CashierModule } from './cashier/cashier.module';
 import { InventoryModule } from './inventory/inventory.module';
+import { BranchManagerModule } from './branchManager/branchManager.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { InventoryModule } from './inventory/inventory.module';
     MongooseModule.forRoot(process.env.DB_URI),
     CashierModule,
     InventoryModule,
+    BranchManagerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
