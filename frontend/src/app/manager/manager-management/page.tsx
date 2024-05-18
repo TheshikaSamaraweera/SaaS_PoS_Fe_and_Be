@@ -65,7 +65,7 @@ export default function UsersPage({}: Props) {
             onClick={() => {
               if (window.confirm(`Do you want to change ${row.original.branchManagerFirstName}'s details?`)) {
                 window.localStorage.setItem("branchManagerId", row.original._id);
-                window.location.href = "/branch-manager/edit-branch-manager";
+                window.location.href = "/manager/edit-bmanagers";
               }
             }}
           >
