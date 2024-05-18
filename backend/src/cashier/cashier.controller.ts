@@ -10,8 +10,9 @@ import {
 import { CashierService } from './cashier.service';
 import { Cashier } from './schemas/cashier.schema';
 import { CreateCashierDto } from './dto/create-cashier-dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { UseInterceptors, UploadedFile } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('cashier')
 export class CashierController {
@@ -23,9 +24,20 @@ export class CashierController {
   }
 
   @Post()
-  async createCashier(@Body() cashier: CreateCashierDto): Promise<Cashier> {
+  async createCashier(
+    @Body() 
+    cashier: CreateCashierDto): Promise<Cashier> {
     return this.CashierService.create(cashier);
   }
+
+  // @Post()
+  // @UseInterceptors(FileInterceptor('cashierImage'))
+  // async createCashier(
+  //   @UploadedFile() file,
+  //   @Body() cashier: CreateCashierDto,
+  // ): Promise<Cashier> {
+  //   return this.CashierService.create(cashier, file);
+  // }
 
   @Get(':id')
   async getCashier(@Param('id') id: string): Promise<Cashier> {

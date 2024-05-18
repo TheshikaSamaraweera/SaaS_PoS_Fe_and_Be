@@ -7,7 +7,7 @@ import { BranchManager } from './schemas/branchManager.schema';
 export class BranchManagerService {
   constructor(
     @InjectModel(BranchManager.name)
-    private readonly branchManagerModel: mongoose.Model<BranchManager>,
+    private branchManagerModel: mongoose.Model<BranchManager>,
   ) {}
 
   async findAll(): Promise<BranchManager[]> {
