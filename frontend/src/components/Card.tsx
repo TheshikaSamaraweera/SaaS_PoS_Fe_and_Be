@@ -11,6 +11,7 @@ export type CardProps = {
   icon: LucideIcon;
   amount: number;
   discription: string;
+  count?: number;
   onClick?: () => void;
 };
 

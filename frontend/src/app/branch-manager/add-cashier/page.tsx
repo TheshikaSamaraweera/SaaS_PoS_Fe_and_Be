@@ -1,7 +1,7 @@
 "use client";
 
 import * as z from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -23,7 +23,7 @@ import {
 import PageTitle from "@/components/PageTitle";
 import { CardContent } from "@/components/Card";
 import axios from "axios";
-import Image from 'next/image';
+import Image from "next/image";
 
 const formSchema = z.object({
   cashierId: z.string(),
@@ -35,6 +35,7 @@ const formSchema = z.object({
   cashierDoB: z.string(),
   cashierGender: z.string(),
   cashierBranch: z.string(),
+  cashierImage: z.string(),
 });
 
 export default function Home() {
@@ -50,17 +51,33 @@ export default function Home() {
       cashierDoB: "",
       cashierGender: "",
       cashierBranch: "",
+      cashierImage: "",
     },
   });
 
-  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post('http://localhost:3000/cashier', values);
-      console.log('Cashier added:', response.data);
+      const formData = new FormData();
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          formData.append(key, data[key]);
+        }
+      }
+
+      const response = await axios.post(
+        "http://localhost:3000/cashier",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("Cashier added:", response.data);
       alert(`${response.data.cashierFirstName} added as cashier`);
     } catch (error) {
-      console.error('Error creating cashier:', error);
-      alert('Error creating cashier');
+      console.error("Error creating cashier:", error);
+      alert("Error creating cashier");
     }
   };
 
@@ -110,7 +127,9 @@ export default function Home() {
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel className="font-bold">Cashier First Name</FormLabel>
+                        <FormLabel className="font-bold">
+                          Cashier First Name
+                        </FormLabel>
                         <FormControl>
                           <Input placeholder="First Name" {...field} />
                         </FormControl>
@@ -140,7 +159,9 @@ export default function Home() {
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel className="font-bold">Cashier Email</FormLabel>
+                        <FormLabel className="font-bold">
+                          Cashier Email
+                        </FormLabel>
                         <FormControl>
                           <Input placeholder="Email" {...field} />
                         </FormControl>
@@ -155,7 +176,9 @@ export default function Home() {
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel className="font-bold">Cashier Address</FormLabel>
+                        <FormLabel className="font-bold">
+                          Cashier Address
+                        </FormLabel>
                         <FormControl>
                           <Input placeholder="Address" {...field} />
                         </FormControl>
@@ -170,7 +193,9 @@ export default function Home() {
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel className="font-bold">Cashier Phone Number</FormLabel>
+                        <FormLabel className="font-bold">
+                          Cashier Phone Number
+                        </FormLabel>
                         <FormControl>
                           <Input placeholder="Phone Number" {...field} />
                         </FormControl>
@@ -185,9 +210,15 @@ export default function Home() {
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel className="font-bold">Cashier Date of Birth</FormLabel>
+                        <FormLabel className="font-bold">
+                          Cashier Date of Birth
+                        </FormLabel>
                         <FormControl>
-                          <Input type="date"placeholder="Date of Birth" {...field} />
+                          <Input
+                            type="date"
+                            placeholder="Date of Birth"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -200,7 +231,9 @@ export default function Home() {
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel className="font-bold">Cashier Gender</FormLabel>
+                        <FormLabel className="font-bold">
+                          Cashier Gender
+                        </FormLabel>
                         <FormControl>
                           <Input placeholder="Gender" {...field} />
                         </FormControl>
@@ -215,9 +248,34 @@ export default function Home() {
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel className="font-bold">Cashier Branch</FormLabel>
+                        <FormLabel className="font-bold">
+                          Cashier Branch
+                        </FormLabel>
                         <FormControl>
                           <Input placeholder="Branch" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="cashierImage"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel className="font-bold">
+                          Cashier Image
+                        </FormLabel>
+                        <FormControl>
+                          <Controller
+                            name="cashierImage"
+                            control={form.control}
+                            render={({ field }) => (
+                              <input type="file" {...field} />
+                            )}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
