@@ -21,6 +21,8 @@ type Props = {};
 export default function UsersPage({}: Props) {
   //const router = useRouter();
   const [cashiers, setCashiers] = useState<Cashier[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  
   const columns: ColumnDef<Cashier>[] = [
     {
       accessorKey: "cashierId",
@@ -62,14 +64,6 @@ export default function UsersPage({}: Props) {
       header: "action",
       cell: ({ row }) => (
         <div className="flex gap-2">
-          {/* <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-            onClick={() => {
-              window.location.href = `/pages/branch-manager/edit-cashier/${row.original._id}`;
-            }}
-          >
-            EDIT
-          </button> */}
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
             onClick={() => {
@@ -120,10 +114,23 @@ export default function UsersPage({}: Props) {
       .then((data) => setCashiers(data));
   }, []);
 
+  const filteredCashiers = cashiers.filter((cashier) =>
+    `${cashier.cashierFirstName} ${cashier.cashierLastName} ${cashier.cashierId}`
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="flex flex-col gap-5  w-full">
-      <PageTitle title="Stock / Store" />
-      <DataTable columns={columns} data={cashiers} />
+      <PageTitle title="Manage Cashiers" />
+      <input
+        type="text"
+        placeholder="Search by first name, last name, or cashier ID"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="p-2 border border-gray-300 rounded mb-4"
+      />
+      <DataTable columns={columns} data={filteredCashiers} />
     </div>
   );
 }

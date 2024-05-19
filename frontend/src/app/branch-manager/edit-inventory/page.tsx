@@ -74,12 +74,7 @@ export default function Home() {
     }
   };
 
-  // useEffect(() => {
-  //   const cashierId = form.getValues().cashierId;
-  //   if (cashierId) {
-  //     fetchCashier(cashierId);
-  //   }
-  // }, [form.watch('cashierId')]);
+
 
   useEffect(() => {
     fetchItems();
@@ -110,21 +105,9 @@ export default function Home() {
                 })}
                 className="max-w-md w-full flex flex-col gap-4"
               >
-                {/* <FormField
-                  control={form.control}
-                  name="cashierId"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Cashier Id</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Cashier Id" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                /> */}
+
+
+
                 {item && (
                   <>
                     <FormItem>

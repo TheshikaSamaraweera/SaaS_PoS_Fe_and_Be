@@ -58,6 +58,7 @@ export default function Home() {
       const response = await axios.post('http://localhost:3000/cashier', values);
       console.log('Cashier added:', response.data);
       alert(`${response.data.cashierFirstName} added as cashier`);
+      form.reset();  // Clear the form after successful submission
     } catch (error) {
       console.error('Error creating cashier:', error);
       alert('Error creating cashier');
@@ -187,7 +188,7 @@ export default function Home() {
                       <FormItem>
                         <FormLabel className="font-bold">Cashier Date of Birth</FormLabel>
                         <FormControl>
-                          <Input type="date"placeholder="Date of Birth" {...field} />
+                          <Input type="date" placeholder="Date of Birth" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
