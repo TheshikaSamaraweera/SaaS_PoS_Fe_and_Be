@@ -9,57 +9,49 @@ import SalesCard, { SalesProps } from "@/components/SalesCard";
 
 const cardData: CardProps[] = [
   {
-    label: "Total Revenue",
+    label: "Total Revenue this month",
     amount: "45,231.89",
     discription: "+20.1% from last month",
     icon: DollarSign
   },
   {
-    label: "Subscriptions",
-    amount: "2350",
-    discription: "+180.1% from last month",
-    icon: Users
-  },
-  {
-    label: "Sales",
+    label: "Total revenue today",
     amount: "12,234",
     discription: "+19% from last month",
     icon: CreditCard
   },
   {
-    label: "Active Now",
-    amount: "573",
-    discription: "+201 since last hour",
-    icon: Activity
+    label: "Total Users",
+    amount: "1,234",
+    discription: "+19% from last month",
+    icon: Users
   }
+  
+
 ];
 
 const uesrSalesData: SalesProps[] = [
   {
-    name: "Olivia Martin",
+    name: "Kegalle",
     email: "olivia.martin@email.com",
     saleAmount: "+$1,999.00"
   },
   {
-    name: "Jackson Lee",
+    name: "Kandy",
     email: "isabella.nguyen@email.com",
     saleAmount: "+$1,999.00"
   },
   {
-    name: "Isabella Nguyen",
+    name: "Anuradhapura",
     email: "isabella.nguyen@email.com",
-    saleAmount: "+$39.00"
+    saleAmount: "+$1,999.00"
   },
   {
-    name: "William Kim",
-    email: "will@email.com",
-    saleAmount: "+$299.00"
+    name: "Badulla",
+    email: "isabella.nguyen@email.com",
+    saleAmount: "+$1,999.00"
   },
-  {
-    name: "Sofia Davis",
-    email: "sofia.davis@email.com",
-    saleAmount: "+$39.00"
-  }
+  
 ];
 
 export default function Home() {
@@ -79,15 +71,15 @@ export default function Home() {
       </section>
       <section className="grid grid-cols-1  gap-4 transition-all lg:grid-cols-2">
         <CardContent>
-          <p className="p-4 font-semibold">Overview</p>
+          <p className="p-4 font-semibold">Daily Income of branches</p>
 
           <BarChart />
         </CardContent>
         <CardContent className="flex justify-between gap-4">
           <section>
-            <p>Recent Sales</p>
+            <p>Top five sales branches</p>
             <p className="text-sm text-gray-400">
-              You made 265 sales this month.
+              You made best sales Today.
             </p>
           </section>
           {uesrSalesData.map((d, i) => (

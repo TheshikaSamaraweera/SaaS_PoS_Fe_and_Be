@@ -9,7 +9,7 @@ export type CardProps = {
   label: string;
   code?: string;
   icon: LucideIcon;
-  amount: number;
+  amount: string;
   discription: string;
   onClick?: () => void;
 };
