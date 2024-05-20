@@ -19,11 +19,15 @@ import { useState, useEffect } from "react";
 import { any, string } from "zod";
 import "../../../../styles/pos.css";
 import Image from "next/image";
+import { nanoid } from "nanoid";
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("Snacks");
   const [selectedItems, setSelectedItems] = useState<CardProps[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [billId, setBillId] = useState(nanoid());
+  const [cashierId, setCashierId] = useState("");
+  const [branchId, setBranchId] = useState("");
 
   const [cardData, setCardData] = useState<{ [key: string]: CardProps[] }>({});
   useEffect(() => {
@@ -107,18 +111,50 @@ export default function Home() {
     }
   };
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    if (name === "cashierId") {
+      setCashierId(value);
+    } else if (name === "branchId") {
+      setBranchId(value);
+    } else {
+      setSearchTerm(value);
+    }
+  };
+
   const printBill = async () => {
     try {
+      const now = new Date();
+      // const localDate = now.toLocaleDateString("en-US", {
+      //   timeZone: "Asia/Kolkata",
+      // });
+      const month = String(now.getMonth() + 1).padStart(2, "0"); // months from 1-12
+      const day = String(now.getDate()).padStart(2, "0");
+      const year = now.getFullYear();
+
+      const localDate = month + day + year;
+      const localTime = now.toLocaleTimeString("en-US", {
+        timeZone: "Asia/Kolkata",
+        hour12: false,
+      });
       const response = await fetch("http://localhost:3000/bill", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          billId: billId,
+          cashierId: cashierId,
+          branchId: branchId,
           items: selectedItems.map((item) => ({
             itemName: item.label,
-            sellPrice: item.amount,
+            unitPrice: item.amount,
+            count: item.count || 1,
+            totalPrice: Number(item.amount) * (item.count || 1),
           })),
+          totalAmount: totalAmount.toFixed(2),
+          billDate: localDate,
+          billTime: localTime,
         }),
       });
 
@@ -127,6 +163,7 @@ export default function Home() {
       }
 
       window.print();
+      setBillId(nanoid());
     } catch (error) {
       console.error("Error saving bill:", error);
     }
@@ -149,8 +186,21 @@ export default function Home() {
             <CardContent>
               <section className="flex flex-col items-center p-1">
                 <h2>Selected Items</h2>
+                <p>Bill ID: {billId}</p>
                 <p>Date: {new Date().toLocaleDateString()}</p>
                 <p>Time: {new Date().toLocaleTimeString()}</p>
+                <Input
+                  type="text"
+                  name="cashierId"
+                  placeholder="Cashier ID"
+                  onChange={handleInputChange}
+                />
+                <Input
+                  type="text"
+                  name="branchId"
+                  placeholder="Branch ID"
+                  onChange={handleInputChange}
+                />
                 {selectedItems.map((item, index) => (
                   <div className="item-info" key={index}>
                     <h3 className="item-info-header">

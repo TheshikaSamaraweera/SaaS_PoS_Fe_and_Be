@@ -9,10 +9,13 @@ export class Item {
   itemName: string;
 
   @Prop()
-  sellPrice: number;
+  unitPrice: number;
 
   @Prop()
-  quantity: number;
+  count: number;
+
+  @Prop()
+  totalPrice: number;
 }
 
 export const ItemSchema = SchemaFactory.createForClass(Item);
@@ -23,6 +26,24 @@ export const ItemSchema = SchemaFactory.createForClass(Item);
 export class Bill {
   @Prop()
   id: string;
+
+  @Prop()
+  billId: string;
+
+  @Prop()
+  totalAmount: number;
+
+  @Prop()
+  billDate: string;
+
+  @Prop()
+  billTime: string;
+
+  @Prop()
+  cashierId: string;
+
+  @Prop()
+  branchId: string;
 
   @Prop({ type: [ItemSchema] })
   items: Item[];

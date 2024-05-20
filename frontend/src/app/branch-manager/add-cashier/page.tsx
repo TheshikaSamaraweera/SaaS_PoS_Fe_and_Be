@@ -35,7 +35,6 @@ const formSchema = z.object({
   cashierDoB: z.string(),
   cashierGender: z.string(),
   cashierBranch: z.string(),
-  cashierImage: z.string(),
 });
 
 export default function Home() {
@@ -51,35 +50,23 @@ export default function Home() {
       cashierDoB: "",
       cashierGender: "",
       cashierBranch: "",
-      cashierImage: "",
     },
   });
 
-  const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const formData = new FormData();
-      for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-          formData.append(key, data[key]);
-        }
-      }
-
       const response = await axios.post(
         "http://localhost:3000/cashier",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        values
       );
-      console.log("Cashier added:", response.data);
-      alert(`${response.data.cashierFirstName} added as cashier`);
+      console.log("Cashier addeded:", response.data);
+      alert(`${values.cashierFirstName} added to inventory successfully!`);
     } catch (error) {
-      console.error("Error creating cashier:", error);
-      alert("Error creating cashier");
+      console.error("Error adding cashier:", error);
+      alert("Error adding cashier to database!");
     }
   };
+
 
   return (
     <div className="flex flex-col gap-5 w-full">
@@ -253,29 +240,6 @@ export default function Home() {
                         </FormLabel>
                         <FormControl>
                           <Input placeholder="Branch" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="cashierImage"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">
-                          Cashier Image
-                        </FormLabel>
-                        <FormControl>
-                          <Controller
-                            name="cashierImage"
-                            control={form.control}
-                            render={({ field }) => (
-                              <input type="file" {...field} />
-                            )}
-                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

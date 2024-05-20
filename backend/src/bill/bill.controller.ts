@@ -30,6 +30,21 @@ export class BillController {
     return this.BillService.findById(id);
   }
 
+  @Get('date/:billDate')
+  async findByDate(@Param('billDate') billDate: string): Promise<Bill[]> {
+    return this.BillService.findByDate(billDate);
+  }
+
+  @Get('cashier/:cashierId')
+  async findByCashierId(@Param('cashierId') cashierId: string): Promise<Bill[]> {
+    return this.BillService.findByCashierId(cashierId);
+  }
+
+  @Get('branch/:branchId')
+  async findByBranchId(@Param('branchId') branchId: string): Promise<Bill[]> {
+    return this.BillService.findByBranchId(branchId);
+  }
+
   @Put(':id')
   async updateBill(@Param('id') id: string, @Body() bill): Promise<Bill> {
     return this.BillService.updateById(id, bill);
