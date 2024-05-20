@@ -10,41 +10,14 @@ import {
 } from "recharts";
 
 type Props = {};
+const data = Array.from({ length: 12 }, (_, i) => ({
+  name: `${i + 8}:00`,
+  total: Math.floor(Math.random() * 5000) + 1000
+}));
 
-const data = [
-  {
-    name: "Galle",
-    total: Math.floor(Math.random() * 5000) + 1000
-  },
 
-  {
-    name: "Kegalle",
-    total: Math.floor(Math.random() * 5000) + 1000
-  },
-  {
-    name: "Kandy",
-    total: Math.floor(Math.random() * 5000) + 1000
-  },
 
-  {
-    name: "Anuradhapura",
-    total: Math.floor(Math.random() * 5000) + 1000
-  },
-  
-
-  {
-    name: "Badulla",
-    total: Math.floor(Math.random() * 5000) + 1000
-  },
-  
-  {
-    name: "Hambantota",
-    total: Math.floor(Math.random() * 5000) + 1000
-  }
- 
-];
-
-export default function BarChart({}: Props) {
+export default function ManagerBarChart({}: Props) {
   return (
     <ResponsiveContainer width={"100%"} height={350}>
       <BarGraph data={data}>

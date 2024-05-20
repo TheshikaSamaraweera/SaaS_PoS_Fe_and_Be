@@ -1,5 +1,5 @@
 export class UpdateBranchDto {
-  readonly id: string;
+  readonly branchid: string;
   readonly branchName: string;
   readonly city: string;
   readonly street: string;

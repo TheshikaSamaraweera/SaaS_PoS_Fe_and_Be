@@ -29,7 +29,9 @@ export default function RootLayout({
           }
         )}
       >
+
         <DynamicSidebar />
+
         <div className="p-8 w-full">{children}</div>
       </body>
     </html>

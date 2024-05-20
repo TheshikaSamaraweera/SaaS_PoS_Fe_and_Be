@@ -21,6 +21,7 @@ import { BranchModule } from './branch/branch.module';
     BillModule,
     BranchManagerModule,
     BranchModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],

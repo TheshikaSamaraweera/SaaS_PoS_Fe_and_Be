@@ -1,209 +1,237 @@
-/**
- * eslint-disable @next/next/no-img-element
- *
- * @format
- */
-
-/** @format */
 "use client";
 
-import { DataTable } from "@/components/DataTable";
-import { ColumnDef } from "@tanstack/react-table";
-import React from "react";
-import PageTitle from "@/components/PageTitle";
-import { Icon } from "next/dist/lib/metadata/types/metadata-types";
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  Select,
+} from "@/components/ui/select";
+import PageTitle from "@/components/PageTitle";
+import { CardContent } from "@/components/Card";
+import axios from "axios";
+import Image from 'next/image';
 
-type Props = {};
-type Payment = {
-  name: string;
-  email: string;
-  dob: string;
-  address: string;
-  id: string;
-  
-};
+const formSchema = z.object({
+  branchManagerId: z.string(),
+  branchManagerFirstName: z.string(),
+  branchManagerLastName: z.string(),
+  branchManagerEmail: z.string(),
+  branchManagerAddress: z.string(),
+  branchManagerPhone: z.string(),
+  branchManagerDoB: z.string(),
+  branchManagerGender: z.string(),
+  branchManagerBranch: z.string(),
+});
 
-const columns: ColumnDef<Payment>[] = [
-  {
-    accessorKey: "id",
-    header: "Id"
-  },
-  {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => {
-      return (
-        <div className="flex gap-2 items-center">
-          <img
-            className="h-10 w-10"
-            src={`https://api.dicebear.com/7.x/lorelei/svg?seed=${row.getValue(
-              "name"
-            )}`}
-            alt="user-image"
-          />
-          <p>{row.getValue("name")} </p>
-        </div>
-      );
+export default function Home() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      branchManagerId: "",
+      branchManagerFirstName: "",
+      branchManagerLastName: "",
+      branchManagerEmail: "",
+      branchManagerAddress: "",
+      branchManagerPhone: "",
+      branchManagerDoB: "",
+      branchManagerGender: "",
+      branchManagerBranch: "",
+    },
+  });
+
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const response = await axios.post('http://localhost:3000/branch-manager', values);
+      console.log('Branch Manager added:', response.data);
+      alert(`${response.data.branchManagerFirstName} added as branch manager`);
+    } catch (error) {
+      console.error('Error creating branch manager:', error);
+      alert('Error creating branch manager');
     }
-  },
-  {
-    accessorKey: "email",
-    header: "Email"
-  },
-  {
-    accessorKey: "dob",
-    header: "DoB"
-  },
-  {
-    accessorKey: "address",
-    header: "Address"
-  },
-  {
-    accessorKey: "action", // New action column
-    header: "Action",
-    cell: ({ row }) => (
-      <button onClick={() => handleAction(row.original)}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9 5l7 7-7 7"
-          />
-        </svg>
-      </button>
-    )
-  }
-];
+  };
 
-
-const data: Payment[] = [
-  {
-    name: "John Doe",
-    email: "john@example.com",
-    dob: "2023-01-01",
-    address: "kagalla",
-    id: "1",
-    
-  },
-  {
-    name: "Alice Smith",
-    email: "alice@example.com",
-    dob: "2023-02-15",
-    address: "kurunegala",
-    id: "2",
-  },
-  {
-    name: "Bob Johnson",
-    email: "bob@example.com",
-    dob: "2023-03-20",
-    address: "kurunegala",
-    id: "3",
-  },
-  {
-    name: "Emma Brown",
-    email: "emma@example.com",
-    dob: "2023-04-10",
-    address: "kurunegala",
-    id: "4",
-  },
-  {
-    name: "Michael Davis",
-    email: "michael@example.com",
-    dob: "2023-05-05",
-    address: "kurunegala",
-    id: "5",
-  },
-  {
-    name: "Sophia Wilson",
-    email: "sophia@example.com",
-    dob: "2023-06-18",
-    address: "kurunegala Transfer",
-    id: "6",
-  },
-  {
-    name: "Liam Garcia",
-    email: "liam@example.com",
-    dob: "2023-07-22",
-    address: "kurunegala",
-    id: "7",
-  },
-  {
-    name: "Olivia Martinez",
-    email: "olivia@example.com",
-    dob: "2023-08-30",
-    address: "kurunegala Pay",
-    id: "8",
-  },
-  {
-    name: "Noah Rodriguez",
-    email: "noah@example.com",
-    dob: "2023-09-12",
-    address: "kurunegala Pay",
-    id: "9",
-  },
-  {
-    name: "Ava Lopez",
-    email: "ava@example.com",
-    dob: "2023-10-25",
-    address: "kurunegala",
-    id: "10",
-  },
-  {
-    name: "Elijah Hernandez",
-    email: "elijah@example.com",
-    dob: "2023-11-05",
-    address: "kurunegala",
-    id: "11",
-  },
-  {
-    name: "Mia Gonzalez",
-    email: "mia@example.com",
-    dob: "2023-12-08",
-    address: "kurunegala Pay",
-    id: "12",
-  },
-  {
-    name: "James Perez",
-    email: "james@example.com",
-    dob: "2024-01-18",
-    address: "kurunegala Cash",
-    id: "13",
-  },
-  {
-    name: "Charlotte Carter",
-    email: "charlotte@example.com",
-    dob: "2024-02-22",
-    address: "kurunegala",
-    id: "14",
-  },
-  {
-    name: "Benjamin Taylor",
-    email: "benjamin@example.com",
-    dob: "2024-03-30",
-    address: "kurunegala",
-    id: "15",
-  }
-];
-
-export default function UsersPage({}: Props) {
   return (
-    <div className="flex flex-col gap-5  w-full">
+    <div className="flex flex-col gap-5 w-full">
+      <PageTitle title="Add new Branch Manager" />
+      <section>
+        <main className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <CardContent className="lg:col-span-1 flex items-center justify-center">
+            <div className="flex flex-col items-center justify-center">
+              <img
+                src="https://via.placeholder.com/150"
+                alt="Insert Image"
+                className="w-64 h-64 mb-4"
+                aria-placeholder="empty"
+              />
+              <p className="text-gray-600 text-center">
+                Click or drag image to upload
+              </p>
+            </div>
+          </CardContent>
 
-      <PageTitle title="Branch Managers" />
-      <Button style={{ width: "200px" }}>Add Branch managers</Button>
-      <DataTable columns={columns} data={data} />
+          <CardContent className="lg:col-span-2">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="max-w-md w-full flex flex-col gap-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="branchManagerId"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel className="font-bold">Branch Manager Id</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Branch Manager Id" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerFirstName"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel className="font-bold">Branch Manager First Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="First Name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerLastName"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel className="font-bold">Last Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Last Name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerEmail"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel className="font-bold">Branch Manager Email</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Email" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerAddress"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel className="font-bold">Branch Manager Address</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Address" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerPhone"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel className="font-bold">Branch Manager Phone Number</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Phone Number" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerDoB"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel className="font-bold">Branch Manager Date of Birth</FormLabel>
+                        <FormControl>
+                          <Input type="date" placeholder="Date of Birth" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerGender"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel className="font-bold">Branch Manager Gender</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Gender" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerBranch"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel className="font-bold">Branch Manager Branch</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Branch" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <Button type="submit" className="w-full font-bold">
+                  Submit
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+        </main>
+      </section>
     </div>
   );
 }
-function handleAction(original: Payment): void {
-  throw new Error("Function not implemented.");
-}
-
