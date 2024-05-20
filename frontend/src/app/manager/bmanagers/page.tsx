@@ -1,5 +1,5 @@
 "use client";
-
+import { v4 as uuidv4 } from 'uuid';
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,27 +14,28 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-  SelectValue,
+  Select,
   SelectTrigger,
   SelectContent,
   SelectItem,
-  Select,
 } from "@/components/ui/select";
 import PageTitle from "@/components/PageTitle";
 import { CardContent } from "@/components/Card";
 import axios from "axios";
-import Image from 'next/image';
 
+// Enhanced validation schema
 const formSchema = z.object({
   branchManagerId: z.string(),
-  branchManagerFirstName: z.string(),
-  branchManagerLastName: z.string(),
-  branchManagerEmail: z.string(),
-  branchManagerAddress: z.string(),
-  branchManagerPhone: z.string(),
-  branchManagerDoB: z.string(),
-  branchManagerGender: z.string(),
-  branchManagerBranch: z.string(),
+  branchManagerFirstName: z.string().nonempty("First name is required"),
+  branchManagerLastName: z.string().nonempty("Last name is required"),
+  branchManagerEmail: z.string().email("Invalid email address"),
+  branchManagerAddress: z.string().nonempty("Address is required"),
+  branchManagerPhone: z.string().regex(/^\d{10}$/, "Phone number must be exactly 10 digits"),
+  branchManagerDoB: z.string().nonempty("Date of birth is required"),
+  branchManagerGender: z.enum(["Male", "Female", "Other"], {
+    required_error: "Gender is required",
+  }),
+  branchManagerBranch: z.string().nonempty("Branch is required"),
 });
 
 export default function Home() {
@@ -48,7 +49,7 @@ export default function Home() {
       branchManagerAddress: "",
       branchManagerPhone: "",
       branchManagerDoB: "",
-      branchManagerGender: "",
+      branchManagerGender: undefined,
       branchManagerBranch: "",
     },
   });
@@ -92,137 +93,128 @@ export default function Home() {
                 <FormField
                   control={form.control}
                   name="branchManagerId"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Branch Manager Id</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Branch Manager Id" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-bold">Branch Manager Id</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Branch Manager Id" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
                 <FormField
                   control={form.control}
                   name="branchManagerFirstName"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Branch Manager First Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="First Name" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-bold">Branch Manager First Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="First Name" {...field} />
+                      </FormControl>
+                      <FormMessage className="text-red-600" />
+                    </FormItem>
+                  )}
                 />
                 <FormField
                   control={form.control}
                   name="branchManagerLastName"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Last Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Last Name" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-bold">Last Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Last Name" {...field} />
+                      </FormControl>
+                      <FormMessage className="text-red-600" />
+                    </FormItem>
+                  )}
                 />
                 <FormField
                   control={form.control}
                   name="branchManagerEmail"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Branch Manager Email</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Email" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-bold">Branch Manager Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Email" {...field} />
+                      </FormControl>
+                      <FormMessage className="text-red-600" />
+                    </FormItem>
+                  )}
                 />
                 <FormField
                   control={form.control}
                   name="branchManagerAddress"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Branch Manager Address</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Address" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-bold">Branch Manager Address</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Address" {...field} />
+                      </FormControl>
+                      <FormMessage className="text-red-600" />
+                    </FormItem>
+                  )}
                 />
                 <FormField
                   control={form.control}
                   name="branchManagerPhone"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Branch Manager Phone Number</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Phone Number" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-bold">Branch Manager Phone Number</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Phone Number" {...field} />
+                      </FormControl>
+                      <FormMessage className="text-red-600" />
+                    </FormItem>
+                  )}
                 />
                 <FormField
                   control={form.control}
                   name="branchManagerDoB"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Branch Manager Date of Birth</FormLabel>
-                        <FormControl>
-                          <Input type="date" placeholder="Date of Birth" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-bold">Branch Manager Date of Birth</FormLabel>
+                      <FormControl>
+                        <Input type="date" placeholder="Date of Birth" {...field} />
+                      </FormControl>
+                      <FormMessage className="text-red-600" />
+                    </FormItem>
+                  )}
                 />
                 <FormField
                   control={form.control}
                   name="branchManagerGender"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Branch Manager Gender</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Gender" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-bold">Branch Manager Gender</FormLabel>
+                      <FormControl>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <SelectTrigger>
+                            <Input placeholder="Gender" value={field.value} readOnly />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Male">Male</SelectItem>
+                            <SelectItem value="Female">Female</SelectItem>
+                            <SelectItem value="Other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage className="text-red-600" />
+                    </FormItem>
+                  )}
                 />
                 <FormField
                   control={form.control}
                   name="branchManagerBranch"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Branch Manager Branch</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Branch" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-bold">Branch Manager Branch</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Branch" {...field} />
+                      </FormControl>
+                      <FormMessage className="text-red-600" />
+                    </FormItem>
+                  )}
                 />
                 <Button type="submit" className="w-full font-bold">
                   Submit
