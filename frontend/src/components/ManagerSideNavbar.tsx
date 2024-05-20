@@ -74,13 +74,13 @@ export default function SideNavbar({}: Props) {
             variant: "ghost"
           },
           {
-            title: "Add Branch",
+            title: "Add Branch Managers",
             href: "/manager/bmanagers",
             icon: PackagePlus,
             variant: "ghost"
           },
           {
-            title: "Branch",
+            title: "Branch Managers",
             href: "/manager/manager-management",
             icon: Warehouse,
             variant: "ghost"

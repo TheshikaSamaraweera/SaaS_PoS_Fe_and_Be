@@ -55,7 +55,7 @@ export default function Home() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post('http://localhost:3000/managers', values);
+      const response = await axios.post('http://localhost:3000/branch-manager', values);
       console.log('Branch Manager added:', response.data);
       alert(`${response.data.branchManagerFirstName} added as branch manager`);
     } catch (error) {

@@ -8,11 +8,11 @@ import {
   Put,
 } from '@nestjs/common';
 import { BranchManagerService } from './branchManager.service';
-import { CreateBranchManagerDto } from './dto/create-dto';
+import { CreateBranchManagerDto } from './dto/create-branch-manager-dto';
 import { UpdateBranchManagerDto } from './dto/update-book-dto';
 import { BranchManager } from './schemas/branchManager.schema';
 
-@Controller('managers')
+@Controller('branch-manager')
 export class BranchManagerController {
   constructor(private branchManagerService: BranchManagerService) {}
 
@@ -21,7 +21,7 @@ export class BranchManagerController {
     return this.branchManagerService.findAll();
   }
   @Post()
-  async createBook(
+  async createBranchManager(
     @Body()
     branchManager: CreateBranchManagerDto,
   ): Promise<BranchManager> {

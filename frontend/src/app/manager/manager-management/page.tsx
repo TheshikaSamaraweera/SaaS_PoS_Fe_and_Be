@@ -77,7 +77,7 @@ export default function UsersPage({}: Props) {
               if (window.confirm(`Do you want to remove ${row.original.branchManagerFirstName}?`)) {
                 try {
                   const response = await fetch(
-                    `http://localhost:3000/managers/${row.original._id}`,
+                    `http://localhost:3000/branch-manager/${row.original._id}`,
                     {
                       method: "DELETE",
                     }
@@ -105,7 +105,7 @@ export default function UsersPage({}: Props) {
   ];
 
   useEffect(() => {
-    fetch("http://localhost:3000/managers")
+    fetch("http://localhost:3000/branch-manager")
       .then((response) => response.json())
       .then((data) => setBranchManagers(data));
   }, []);

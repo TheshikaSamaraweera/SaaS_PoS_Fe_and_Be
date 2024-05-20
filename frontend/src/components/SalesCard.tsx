@@ -12,7 +12,7 @@ import React from "react";
 export type SalesProps = {
   name: string;
   email: string;
-  saleAmount: string;
+  saleAmount: number;
 };
 
 export default function SalesCard(props: SalesProps) {
