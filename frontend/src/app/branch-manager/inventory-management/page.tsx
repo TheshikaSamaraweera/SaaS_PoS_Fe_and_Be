@@ -20,6 +20,7 @@ type Inventory = {
 
 export default function UsersPage() {
   const [inventories, setInventories] = useState<Inventory[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const columns: ColumnDef<Inventory>[] = [
     {
@@ -42,37 +43,37 @@ export default function UsersPage() {
     },
     {
       accessorKey: "itemName",
-      header: "itemName",
+      header: "Item Name",
     },
     {
       accessorKey: "quantity",
-      header: "quantity",
+      header: "Quantity",
     },
     {
       accessorKey: "supply",
-      header: "supply",
+      header: "Supply",
     },
     {
       accessorKey: "date",
-      header: "date",
+      header: "Date",
     },
     {
       accessorKey: "unitPrice",
-      header: "unitPrice",
+      header: "Unit Price",
     },
     {
       accessorKey: "sellPrice",
-      header: "sellPrice",
+      header: "Sell Price",
     },
     {
       accessorKey: "action",
-      header: "action",
+      header: "Action",
       cell: ({ row }) => (
         <div className="flex gap-2">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
             onClick={() => {
-              if (window.confirm(`Do you want to change details of the ${row.original.itemName} ?`)) {
+              if (window.confirm(`Do you want to change details of the ${row.original.itemName}?`)) {
                 window.localStorage.setItem("itemID", row.original._id);
                 window.location.href = "/branch-manager/edit-inventory";
               }
@@ -96,27 +97,18 @@ export default function UsersPage() {
                   }
                   setInventories(
                     inventories.filter(
-                      (cashier: Inventory) =>
-                        cashier.itemID !== row.original.itemID
+                      (inventory: Inventory) =>
+                        inventory.itemID !== row.original.itemID
                     )
                   );
                 } catch (error) {
-                  console.error("Error deleting cashier:", error);
+                  console.error("Error deleting inventory item:", error);
                 }
               }
             }}
           >
             DELETE
           </button>
-          {/* <button
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-            onClick={() => {
-              // Handle the delete action
-              console.log('Delete:', row.original);
-            }}
-          >
-            DELETE
-          </button> */}
         </div>
       ),
     },
@@ -127,10 +119,24 @@ export default function UsersPage() {
       .then((response) => response.json())
       .then((data) => setInventories(data));
   }, []);
+
+  const filteredInventories = inventories.filter((inventory) =>
+    `${inventory.itemID} ${inventory.itemName}`
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="flex flex-col gap-5  w-full">
+    <div className="flex flex-col gap-5 w-full">
       <PageTitle title="Stock / Store" />
-      <DataTable columns={columns} data={inventories} />
+      <input
+        type="text"
+        placeholder="Search by item ID or item name"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="p-2 border border-gray-300 rounded mb-4"
+      />
+      <DataTable columns={columns} data={filteredInventories} />
     </div>
   );
 }

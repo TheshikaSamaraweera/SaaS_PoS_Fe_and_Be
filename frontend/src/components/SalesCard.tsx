@@ -29,7 +29,7 @@ export default function SalesCard(props: SalesProps) {
             </div>
         </div>
       </section>
-        <p>{props.saleAmount}</p>
+      <p>{`Rs. ${props.saleAmount}.00`}</p>
     </div>
   );
 }

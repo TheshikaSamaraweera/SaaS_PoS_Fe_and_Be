@@ -13,6 +13,14 @@
   }
 }
 
+.item-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-weight: bold;
+}
+
 .item-info {
   display: flex;
   justify-content: space-between;
@@ -22,7 +30,8 @@
   margin-bottom: 10px;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  width: flex;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .item-info h5 {
@@ -30,17 +39,82 @@
   font-size: 1.2em;
 }
 
+.item-label {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.item-amount {
+  flex-grow: 1;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.print-button, .clear-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.print-button {
+  background-color: #007BFF;
+  color: white;
+}
+
+.print-button:hover {
+  background-color: #0056b3;
+}
+
 .clear-button {
   background-color: #dc3545;
   color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background-color 0.3s ease;
 }
 
 .clear-button:hover {
   background-color: #c82333;
 }
+.close-button {
+  width: 20px; 
+  height: 20px; 
+  font-size: 12px; /* if it's a text-based button */
+  width: 20px; /* if it's an image-based button */
+  height: 20px; /* if it's an image-based button */
+  margin-left: auto;
+  padding-right: 5px;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+.flex {
+  display: flex;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.w-full {
+  width: 100%;
+}
+
+p.left-align {
+  text-align: left;
+}
+
+.time-span {
+  display: block;
+  text-align: right;
+}
+
+/* p {
+  display: flex;
+  justify-content: space-between;
+} */

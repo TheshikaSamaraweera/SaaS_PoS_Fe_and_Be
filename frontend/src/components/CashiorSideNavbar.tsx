@@ -77,7 +77,7 @@ export default function SideNavbar({}: Props) {
             variant: "ghost"
           },
           {
-            title: "Add New Item",
+            title: "Request Item",
             href: "/cashier/addnewitem",
             icon: PackagePlus,
             variant: "ghost"

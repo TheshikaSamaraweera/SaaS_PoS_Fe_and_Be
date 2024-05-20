@@ -4,11 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "../lib/utils";
-import SideNavbar from "@/components/CashiorSideNavbar";
-import CashiorSideNavbar from "@/components/CashiorSideNavbar";
-import BmanagerSideNavbar from "@/components/BmanagerSideNavbar";
-import SasminSideNavbar from "@/components/SasminSideNavbar";
-import ManagerSideNavbar from "@/components/ManagerSideNavbar";
+import DynamicSidebar from "@/components/dynamicSidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,17 +29,9 @@ export default function RootLayout({
           }
         )}
       >
-        {/* sidebar */}
-        {/* <p className="border">Sidebar</p> */}
 
-        {/* <CashiorSideNavbar /> */}
-        {/* <SasminSideNavbar/> */}
-        <ManagerSideNavbar/>
-        {/* <BmanagerSideNavbar/> */}
-        {/* <CashiorSideNavbar/> */}
-        {/* <SasminSideNavbar/> */}
+        <DynamicSidebar />
 
-        {/* main page */}
         <div className="p-8 w-full">{children}</div>
       </body>
     </html>
