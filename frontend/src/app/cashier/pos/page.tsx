@@ -111,7 +111,7 @@ export default function Home() {
     }
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target;
     if (name === "cashierId") {
       setCashierId(value);
@@ -164,6 +164,7 @@ export default function Home() {
 
       window.print();
       setBillId(nanoid());
+      setSelectedItems([]);
     } catch (error) {
       console.error("Error saving bill:", error);
     }
@@ -181,26 +182,32 @@ export default function Home() {
     <div className="flex flex-col gap-5 w-full">
       <PageTitle title="Point of Sales" />
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="printable-section">
+        <div className="printable-section w-full">
           <CardContent className="lg:col-span-1">
             <CardContent>
-              <section className="flex flex-col items-center p-1">
-                <h2>Selected Items</h2>
+              <section className="flex flex-col items-center p-1 w-full">
+                <h2 className="font-bold">Bill</h2>
                 <p>Bill ID: {billId}</p>
-                <p>Date: {new Date().toLocaleDateString()}</p>
-                <p>Time: {new Date().toLocaleTimeString()}</p>
-                <Input
-                  type="text"
-                  name="cashierId"
-                  placeholder="Cashier ID"
-                  onChange={handleInputChange}
-                />
-                <Input
-                  type="text"
-                  name="branchId"
-                  placeholder="Branch ID"
-                  onChange={handleInputChange}
-                />
+                <div className="flex justify-between w-full">
+                  <span>Date: {new Date().toLocaleDateString()}</span>
+                  <span className="time-span">
+                    Time: {new Date().toLocaleTimeString()}
+                  </span>
+                </div>
+                <div className="flex justify-between w-full">
+                  <select name="cashierId" onChange={handleInputChange}>
+                    <option value="">Cashier ID</option>
+                    <option value="CAS001">CAS001</option>
+                    <option value="CAS002">CAS002</option>
+                    <option value="CAS003">CAS003</option>
+                  </select>
+                  <select name="branchId" onChange={handleInputChange}>
+                    <option value="">Branch ID</option>
+                    <option value="BRN001">BRN001</option>
+                    <option value="BRN002">BRN002</option>
+                    <option value="BRN003">BRN003</option>
+                  </select>
+                </div>
                 {selectedItems.map((item, index) => (
                   <div className="item-info" key={index}>
                     <h3 className="item-info-header">

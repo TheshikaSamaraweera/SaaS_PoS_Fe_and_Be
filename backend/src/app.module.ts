@@ -7,6 +7,7 @@ import { CashierModule } from './cashier/cashier.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { BillModule } from './bill/bill.module';
 import { BranchManagerModule } from './branchManager/branchManager.module';
+import { BranchModule } from './branch/branch.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { BranchManagerModule } from './branchManager/branchManager.module';
     InventoryModule,
     BillModule,
     BranchManagerModule,
+    BranchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

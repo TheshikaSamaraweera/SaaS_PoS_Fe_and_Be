@@ -27,34 +27,6 @@ const cardData: CardProps[] = [
   },
 ];
 
-// const uesrSalesData: SalesProps[] = [
-//   {
-//     name: "Olivia Martin",
-//     email: "olivia.martin@email.com",
-//     saleAmount: "+$1,999.00",
-//   },
-//   {
-//     name: "Jackson Lee",
-//     email: "isabella.nguyen@email.com",
-//     saleAmount: "+$1,999.00",
-//   },
-//   {
-//     name: "Isabella Nguyen",
-//     email: "isabella.nguyen@email.com",
-//     saleAmount: "+$39.00",
-//   },
-//   {
-//     name: "William Kim",
-//     email: "will@email.com",
-//     saleAmount: "+$299.00",
-//   },
-//   {
-//     name: "Sofia Davis",
-//     email: "sofia.davis@email.com",
-//     saleAmount: "+$39.00",
-//   },
-// ];
-
 interface Bill {
   timestamp: string;
   billId: string;
@@ -67,9 +39,14 @@ export default function Home() {
   const [billData, setBillData] = useState<Bill[]>([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [totalSales, setTotalSales] = useState(0);
+  const today = new Date();
+  const billDate = `${(today.getMonth() + 1).toString().padStart(2, "0")}${today
+    .getDate()
+    .toString()
+    .padStart(2, "0")}${today.getFullYear()}`;
 
   useEffect(() => {
-    fetch("http://localhost:3000/bill")
+    fetch(`http://localhost:3000/bill/date/${billDate}`)
       .then((response) => response.json())
       .then((data) => {
         const bills = data.reverse();
@@ -102,6 +79,7 @@ export default function Home() {
       <section className="grid grid-cols-1  gap-4 transition-all lg:grid-cols-2">
         <CardContent>
           <p className="p-4 font-semibold">Overview</p>
+          <p>{billDate}</p>
           <CashierBarChart />
         </CardContent>
         <CardContent className="flex justify-between gap-4">
@@ -112,7 +90,10 @@ export default function Home() {
             <SalesCard
               key={i}
               email={bill.billId}
-              name={`${bill.billDate} ${bill.billTime}`}
+              name={`${bill.billDate.slice(0, 2)}/${bill.billDate.slice(
+                2,
+                4
+              )}/${bill.billDate.slice(4)} ${bill.billTime}`}
               saleAmount={bill.totalAmount}
             />
           ))}

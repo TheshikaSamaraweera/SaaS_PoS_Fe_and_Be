@@ -92,4 +92,29 @@
   padding-right: 5px;
 }
 
+.font-bold {
+  font-weight: bold;
+}
+.flex {
+  display: flex;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.w-full {
+  width: 100%;
+}
 
+p.left-align {
+  text-align: left;
+}
+
+.time-span {
+  display: block;
+  text-align: right;
+}
+
+/* p {
+  display: flex;
+  justify-content: space-between;
+} */
