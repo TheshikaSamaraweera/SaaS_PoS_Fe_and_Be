@@ -60,16 +60,22 @@ export default function SideNavbar({}: Props) {
             variant: "default"
           },
           {
-            title: "Users",
-            href: "/manager/users",
+            title: "Items",
+            href: "/manager/inventry",
             icon: UsersRound,
             variant: "ghost"
           },
           
          
           {
-            title: "Items",
-            href: "/manager/inventry",
+            title: "Add-branch",
+            href: "/manager/add-branch",
+            icon: ClipboardList,
+            variant: "ghost"
+          },
+          {
+            title: "Branches",
+            href: "/manager/branch",
             icon: ClipboardList,
             variant: "ghost"
           },

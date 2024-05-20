@@ -1,11 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
+
 @Schema({
   timestamps: true,
 })
 export class Branch {
   @Prop()
-  id: string;
+  branchid: string;
 
   @Prop()
   branchName: string;

@@ -1,163 +1,93 @@
+/** @format */
 "use client";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  SelectValue,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  Select,
-} from "@/components/ui/select";
+
+import React, { useEffect, useState } from "react";
+import { ColumnDef } from "@tanstack/react-table";
+import { DataTable } from "@/components/DataTable";
 import PageTitle from "@/components/PageTitle";
-import { CardContent } from "@/components/Card";
 
-const formSchema = z.object({
-  name: z.string(),
-  address: z.string(),
-  // dob: z.number(),
-  phoneNumber: z.string(),
-  
-});
+type Branch = {
+  _id: string;
+  branchName: string;
+  city: string;
+  street: string;
+  action: string;
+};
 
-export default function Home() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      // dob: 0,
-      address: "",
-      phoneNumber: "",
-      
+type Props = {};
+export default function BranchesPage({}: Props) {
+  const [branches, setBranches] = useState<Branch[]>([]);
+  const columns: ColumnDef<Branch>[] = [
+    {
+      accessorKey: "branchName",
+      header: "Branch Name",
     },
-  });
+    {
+      accessorKey: "city",
+      header: "City",
+    },
+    {
+      accessorKey: "street",
+      header: "Street",
+    },
+    {
+      accessorKey: "action",
+      header: "Action",
+      cell: ({ row }) => (
+        <div className="flex gap-2">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+            onClick={() => {
+              if (window.confirm(`Do you want to edit ${row.original.branchName}?`)) {
+                window.localStorage.setItem("branchId", row.original._id);
+                window.location.href = "/manager/edit-braches";
+              }
+            }}
+          >
+            EDIT
+          </button>
+          <button
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+            onClick={async () => {
+              if (window.confirm(`Do you want to delete ${row.original.branchName}?`)) {
+                try {
+                  const response = await fetch(
+                    `http://localhost:3000/branch/${row.original._id}`,
+                    {
+                      method: "DELETE",
+                    }
+                  );
+                  if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                  }
+                  setBranches(
+                    branches.filter(
+                      (branch: Branch) => branch._id !== row.original._id
+                    )
+                  );
+                } catch (error) {
+                  console.error("Error deleting branch:", error);
+                }
+              }
+            }}
+          >
+            DELETE
+          </button>
+        </div>
+      ),
+    },
+  ];
 
-  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      const response = await fetch('/api/branches/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      // Handle success
-      console.log('Branch created successfully');
-    } catch (error) {
-      // Handle errors
-      console.error('Failed to create branch', error);
-    }
-  };
-  
+  useEffect(() => {
+    fetch("http://localhost:3000/branch")
+      .then((response) => response.json())
+      .then((data) => setBranches(data));
+  }, []);
 
   return (
     <div className="flex flex-col gap-5 w-full">
-      <PageTitle title="Add Branch Manager" />
-      <section>
-        <main className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <CardContent className="lg:col-span-1 flex items-center justify-center">
-            <div className="flex flex-col items-center justify-center">
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Insert Image"
-                className="w-64 h-64 mb-4"
-              />
-              <p className="text-gray-600 text-center">
-                Click or drag image to upload
-              </p>
-            </div>
-          </CardContent>
-
-          <CardContent className="lg:col-span-2">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(handleSubmit)}
-                className="max-w-md w-full flex flex-col gap-4"
-              >
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold" >Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="your Name" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                {/* <FormField
-                  control={form.control}
-                  name="dob"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold" >DoB</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Date of Birth" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                /> */}
-                <FormField
-                  control={form.control}
-                  name="address"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold" >Address</FormLabel>
-                        <FormControl>
-                          <Input placeholder="your Address" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="phoneNumber"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold" >Phone number</FormLabel>
-                        <FormControl>
-                          <Input placeholder="your phone number" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                
-                <Button type="submit" className="w-full font-bold">
-                  Submit
-                </Button>
-              </form>
-            </Form>
-          </CardContent>
-        </main>
-      </section>
+      <PageTitle title="Branches" />
+      <DataTable columns={columns} data={branches} />
     </div>
   );
 }
