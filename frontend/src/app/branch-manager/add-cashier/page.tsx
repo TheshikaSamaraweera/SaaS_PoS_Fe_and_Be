@@ -55,12 +55,12 @@ export default function Home() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/cashier",
-        values
-      );
-      console.log("Cashier addeded:", response.data);
-      alert(`${values.cashierFirstName} added to inventory successfully!`);
+
+      const response = await axios.post('http://localhost:3000/cashier', values);
+      console.log('Cashier added:', response.data);
+      alert(`${response.data.cashierFirstName} added as cashier`);
+      form.reset();  // Clear the form after successful submission
+
     } catch (error) {
       console.error("Error adding cashier:", error);
       alert("Error adding cashier to database!");
@@ -201,11 +201,9 @@ export default function Home() {
                           Cashier Date of Birth
                         </FormLabel>
                         <FormControl>
-                          <Input
-                            type="date"
-                            placeholder="Date of Birth"
-                            {...field}
-                          />
+
+                          <Input type="date" placeholder="Date of Birth" {...field} />
+
                         </FormControl>
                         <FormMessage />
                       </FormItem>
