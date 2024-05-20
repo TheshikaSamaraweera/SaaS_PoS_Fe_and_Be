@@ -10,25 +10,25 @@ import SalesCard, { SalesProps } from "@/components/SalesCard";
 const cardData: CardProps[] = [
   {
     label: "Total Revenue",
-    amount: "$45,231.89",
+    amount: 123,
     discription: "+20.1% from last month",
     icon: DollarSign
   },
   {
     label: "Subscriptions",
-    amount: "+2350",
+    amount: 123,
     discription: "+180.1% from last month",
     icon: Users
   },
   {
     label: "Sales",
-    amount: "+12,234",
+    amount: 123,
     discription: "+19% from last month",
     icon: CreditCard
   },
   {
     label: "Active Now",
-    amount: "+573",
+    amount: 123,
     discription: "+201 since last hour",
     icon: Activity
   }
@@ -38,27 +38,27 @@ const uesrSalesData: SalesProps[] = [
   {
     name: "Olivia Martin",
     email: "olivia.martin@email.com",
-    saleAmount: "+$1,999.00"
+    saleAmount: 123
   },
   {
     name: "Jackson Lee",
     email: "isabella.nguyen@email.com",
-    saleAmount: "+$1,999.00"
+    saleAmount: 123
   },
   {
     name: "Isabella Nguyen",
     email: "isabella.nguyen@email.com",
-    saleAmount: "+$39.00"
+    saleAmount: 123
   },
   {
     name: "William Kim",
     email: "will@email.com",
-    saleAmount: "+$299.00"
+    saleAmount: 123
   },
   {
     name: "Sofia Davis",
     email: "sofia.davis@email.com",
-    saleAmount: "+$39.00"
+    saleAmount: 123
   }
 ];
 
