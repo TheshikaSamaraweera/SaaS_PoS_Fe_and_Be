@@ -1,68 +1,67 @@
 /** @format */
+"use client";
 
 import PageTitle from "@/components/PageTitle";
 import Image from "next/image";
 import { DollarSign, Users, CreditCard, Activity } from "lucide-react";
 import Card, { CardContent, CardProps } from "@/components/Card";
-import BarChart from "@/components/BarChart";
+import CashierBarChart from "@/components/cashierBarChart";
 import SalesCard, { SalesProps } from "@/components/SalesCard";
+import { useEffect, useState } from "react";
+
+const today = new Date();
+const dateString = today.toLocaleDateString();
 
 const cardData: CardProps[] = [
   {
     label: "Total Revenue",
-    amount: "45,231.89",
-    discription: "+20.1% from last month",
+    amount: 0,
+    discription: `Total revenue in ${dateString}`,
     icon: DollarSign,
   },
   {
-    label: "Subscriptions",
-    amount: "2350",
-    discription: "+180.1% from last month",
-    icon: Users,
-  },
-  {
     label: "Sales",
-    amount: "12,234",
-    discription: "+19% from last month",
+    amount: 0,
+    discription: `Sales in ${dateString}`,
     icon: CreditCard,
   },
-  {
-    label: "Active Now",
-    amount: "573",
-    discription: "+201 since last hour",
-    icon: Activity,
-  },
 ];
 
-const uesrSalesData: SalesProps[] = [
-  {
-    name: "Olivia Martin",
-    email: "olivia.martin@email.com",
-    saleAmount: "+$1,999.00",
-  },
-  {
-    name: "Jackson Lee",
-    email: "isabella.nguyen@email.com",
-    saleAmount: "+$1,999.00",
-  },
-  {
-    name: "Isabella Nguyen",
-    email: "isabella.nguyen@email.com",
-    saleAmount: "+$39.00",
-  },
-  {
-    name: "William Kim",
-    email: "will@email.com",
-    saleAmount: "+$299.00",
-  },
-  {
-    name: "Sofia Davis",
-    email: "sofia.davis@email.com",
-    saleAmount: "+$39.00",
-  },
-];
+interface Bill {
+  timestamp: string;
+  billId: string;
+  billDate: string;
+  billTime: string;
+  totalAmount: number;
+}
 
 export default function Home() {
+  const [billData, setBillData] = useState<Bill[]>([]);
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [totalSales, setTotalSales] = useState(0);
+  const today = new Date();
+  const billDate = `${(today.getMonth() + 1).toString().padStart(2, "0")}${today
+    .getDate()
+    .toString()
+    .padStart(2, "0")}${today.getFullYear()}`;
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/bill/date/${billDate}`)
+      .then((response) => response.json())
+      .then((data) => {
+        const bills = data.reverse();
+        setBillData(bills.slice(0, 5));
+        const revenue = bills.reduce(
+          (sum: number, bill: Bill) => sum + bill.totalAmount,
+          0
+        );
+        setTotalRevenue(revenue);
+        setTotalSales(bills.length);
+        cardData[0].amount = revenue;
+        cardData[1].amount = bills.length;
+      });
+  }, []);
+
   return (
     <div className="flex flex-col gap-5  w-full">
       <PageTitle title="Cashier Dashboard" />
@@ -80,22 +79,22 @@ export default function Home() {
       <section className="grid grid-cols-1  gap-4 transition-all lg:grid-cols-2">
         <CardContent>
           <p className="p-4 font-semibold">Overview</p>
-
-          <BarChart />
+          <p>{billDate}</p>
+          <CashierBarChart />
         </CardContent>
         <CardContent className="flex justify-between gap-4">
           <section>
             <p>Recent Sales</p>
-            <p className="text-sm text-gray-400">
-              You made 265 sales this month.
-            </p>
           </section>
-          {uesrSalesData.map((d, i) => (
+          {billData.map((bill, i) => (
             <SalesCard
               key={i}
-              email={d.email}
-              name={d.name}
-              saleAmount={d.saleAmount}
+              email={bill.billId}
+              name={`${bill.billDate.slice(0, 2)}/${bill.billDate.slice(
+                2,
+                4
+              )}/${bill.billDate.slice(4)} ${bill.billTime}`}
+              saleAmount={bill.totalAmount}
             />
           ))}
         </CardContent>

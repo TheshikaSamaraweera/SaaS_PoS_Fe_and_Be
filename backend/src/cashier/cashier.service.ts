@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Cashier } from './schemas/cashier.schema';
 import * as mongoose from 'mongoose';
+import { CreateCashierDto } from './dto/create-cashier-dto';
 
 @Injectable()
 export class CashierService {
@@ -38,4 +39,12 @@ export class CashierService {
     return await this.cashierModel.findByIdAndDelete(id);
   }
 
+  // async create(
+  //   cashier: CreateCashierDto,
+  //   file: Express.Multer.File,
+  // ): Promise<Cashier> {
+  //   const newCashier = new this.cashierModel(cashier);
+  //   newCashier.cashierImage = file.path;
+  //   return newCashier.save();
+  // }
 }
