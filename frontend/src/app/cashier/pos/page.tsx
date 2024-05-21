@@ -20,6 +20,7 @@ import { any, string } from "zod";
 import "../../../../styles/pos.css";
 import Image from "next/image";
 import { nanoid } from "nanoid";
+import BillProcess from "../../../components/bill-process";
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("Snacks");
@@ -28,8 +29,9 @@ export default function Home() {
   const [billId, setBillId] = useState(nanoid());
   const [cashierId, setCashierId] = useState("");
   const [branchId, setBranchId] = useState("");
-
   const [cardData, setCardData] = useState<{ [key: string]: CardProps[] }>({});
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   useEffect(() => {
     fetchItems();
   }, []);
@@ -47,7 +49,6 @@ export default function Home() {
     );
 
     if (existingItem) {
-      // Increment count of existing item
       setSelectedItems(
         selectedItems.map((item) =>
           item.label === card.label
@@ -56,7 +57,6 @@ export default function Home() {
         )
       );
     } else {
-      // Add new item with count of 1
       setSelectedItems([
         ...selectedItems,
         { ...card, id: Date.now(), count: 1 },
@@ -117,65 +117,89 @@ export default function Home() {
       setCashierId(value);
     } else if (name === "branchId") {
       setBranchId(value);
-    } else {
-      setSearchTerm(value);
     }
+    // } else {
+    //   setSearchTerm(value);    //change number 01
+    // }
   };
 
-  const printBill = async () => {
-    try {
-      const now = new Date();
-      // const localDate = now.toLocaleDateString("en-US", {
-      //   timeZone: "Asia/Kolkata",
-      // });
-      const month = String(now.getMonth() + 1).padStart(2, "0"); // months from 1-12
-      const day = String(now.getDate()).padStart(2, "0");
-      const year = now.getFullYear();
+  // const printBill = async () => {
+  //   try {
+  //     const now = new Date();
+  //     // const localDate = now.toLocaleDateString("en-US", {
+  //     //   timeZone: "Asia/Kolkata",
+  //     // });
+  //     const month = String(now.getMonth() + 1).padStart(2, "0"); // months from 1-12
+  //     const day = String(now.getDate()).padStart(2, "0");
+  //     const year = now.getFullYear();
 
-      const localDate = month + day + year;
-      const localTime = now.toLocaleTimeString("en-US", {
-        timeZone: "Asia/Kolkata",
-        hour12: false,
-      });
-      const response = await fetch("http://localhost:3000/bill", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          billId: billId,
-          cashierId: cashierId,
-          branchId: branchId,
-          items: selectedItems.map((item) => ({
-            itemName: item.label,
-            unitPrice: item.amount,
-            count: item.count || 1,
-            totalPrice: Number(item.amount) * (item.count || 1),
-          })),
-          totalAmount: totalAmount.toFixed(2),
-          billDate: localDate,
-          billTime: localTime,
-        }),
-      });
+  //     const localDate = month + day + year;
+  //     const localTime = now.toLocaleTimeString("en-US", {
+  //       timeZone: "Asia/Kolkata",
+  //       hour12: false,
+  //     });
+  //     const response = await fetch("http://localhost:3000/bill", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         billId: billId,
+  //         cashierId: cashierId,
+  //         branchId: branchId,
+  //         items: selectedItems.map((item) => ({
+  //           itemName: item.label,
+  //           unitPrice: item.amount,
+  //           count: item.count || 1,
+  //           totalPrice: Number(item.amount) * (item.count || 1),
+  //         })),
+  //         totalAmount: totalAmount.toFixed(2),
+  //         billDate: localDate,
+  //         billTime: localTime,
+  //       }),
+  //     });
 
-      if (!response.ok) {
-        throw new Error("HTTP error " + response.status);
-      }
+  //     if (!response.ok) {
+  //       throw new Error("HTTP error " + response.status);
+  //     }
 
-      window.print();
-      setBillId(nanoid());
-      setSelectedItems([]);
-    } catch (error) {
-      console.error("Error saving bill:", error);
-    }
-  };
-
-  // const handleSearchChange = (event) => { //there is a typescript error in event,
-  //   setSearchTerm(event.target.value);
+  //     window.print();
+  //     setBillId(nanoid());
+  //     setSelectedItems([]);
+  //   } catch (error) {
+  //     console.error("Error saving bill:", error);
+  //   }
   // };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+  };
+
+  const handlePrintClick = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const resetPos = () => {
+    setSelectedItems([]);
+    setBillId(nanoid());
+    setCashierId("");
+    setBranchId("");
+  };
+
+  const billDetails = {
+    billId,
+    cashierId,
+    branchId,
+    items: selectedItems.map((item) => ({
+      label: item.label,
+      amount: item.amount,
+      count: item.count || 1,
+    })),
+    totalAmount,
   };
 
   return (
@@ -239,8 +263,8 @@ export default function Home() {
                 </h2>
                 <br />
                 <div className="button-container">
-                  <button className="print-button" onClick={printBill}>
-                    PRINT BILL
+                  <button className="print-button" onClick={handlePrintClick}>
+                    PROCESS
                   </button>
                   <button
                     className="clear-button"
@@ -287,6 +311,12 @@ export default function Home() {
           </section>
         </CardContent>
       </section>
+      <BillProcess
+        isVisible={isModalVisible}
+        onClose={handleCloseModal}
+        billDetails={billDetails}
+        resetPos={resetPos}
+      />
     </div>
   );
 }
