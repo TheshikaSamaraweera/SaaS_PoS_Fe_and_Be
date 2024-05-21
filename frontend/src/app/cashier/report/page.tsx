@@ -1,4 +1,4 @@
-"use client"; // This ensures the component is treated as a Client Component
+"use client";
 
 import PageTitle from "@/components/PageTitle";
 import {
@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/table";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import Modal from "react-modal";
+import "../../../../styles/pos.css";
 
 export default function TableDemo() {
   interface Bill {
@@ -22,6 +24,14 @@ export default function TableDemo() {
     branchId: number;
     billDate: string;
     billTime: string;
+    items: Item[];
+  }
+
+  interface Item {
+    itemName: string;
+    unitPrice: number;
+    count: number;
+    totalPrice: number;
   }
 
   interface Invoice {
@@ -31,10 +41,13 @@ export default function TableDemo() {
     branchId: number;
     billDate: string;
     billTime: string;
+    items: Item[];
   }
 
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedBill, setSelectedBill] = useState<Invoice | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchBills = async (billDate?: string) => {
     const url = billDate
@@ -42,6 +55,7 @@ export default function TableDemo() {
       : "http://localhost:3000/bill";
     const response = await fetch(url);
     const data: Bill[] = await response.json();
+
     const formattedData = data.map((bill: Bill) => ({
       billId: bill.billId,
       cashierId: bill.cashierId,
@@ -49,6 +63,7 @@ export default function TableDemo() {
       branchId: bill.branchId,
       billDate: bill.billDate,
       billTime: bill.billTime,
+      items: bill.items,
     }));
     setInvoices(formattedData);
   };
@@ -99,24 +114,38 @@ export default function TableDemo() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {invoices.slice().reverse().map((invoice, index) => (
-              <TableRow
-                key={invoice.billId}
-                className={index % 2 === 0 ? "black-100" : "black-200"}
-              >
-                <TableCell className="font-medium">{invoice.billId}</TableCell>
-                <TableCell>{invoice.cashierId}</TableCell>
-                <TableCell>{invoice.branchId}</TableCell>
-                <TableCell className="text-right">
-                  {`${invoice.billDate.slice(0, 2)}/${invoice.billDate.slice(
-                    2,
-                    4
-                  )}/${invoice.billDate.slice(4)}`}
-                </TableCell>
-                <TableCell className="text-right">{invoice.billTime}</TableCell>
-                <TableCell className="text-right">{invoice.totalAmount}</TableCell>
-              </TableRow>
-            ))}
+            {invoices
+              .slice()
+              .reverse()
+              .map((invoice, index) => (
+                <TableRow
+                  key={invoice.billId}
+                  className={index % 2 === 0 ? "black-100" : "black-200"}
+                  onClick={() => {
+                    console.log("Row clicked, invoice:", invoice);
+                    setSelectedBill(invoice);
+                    setIsModalOpen(true);
+                  }}
+                >
+                  <TableCell className="font-medium">
+                    {invoice.billId}
+                  </TableCell>
+                  <TableCell>{invoice.cashierId}</TableCell>
+                  <TableCell>{invoice.branchId}</TableCell>
+                  <TableCell className="text-right">
+                    {`${invoice.billDate.slice(0, 2)}/${invoice.billDate.slice(
+                      2,
+                      4
+                    )}/${invoice.billDate.slice(4)}`}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {invoice.billTime}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {invoice.totalAmount}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
           <TableFooter>
             <TableRow>
@@ -135,6 +164,90 @@ export default function TableDemo() {
             </TableRow>
           </TableFooter>
         </Table>
+        <Modal
+          isOpen={isModalOpen}
+          onRequestClose={() => setIsModalOpen(false)}
+          contentLabel="Bill Details"
+          style={{
+            overlay: {
+              backgroundColor: "rgba(0, 0, 0, 0.01)",
+            },
+            content: {
+              top: "50%",
+              left: "50%",
+              right: "auto",
+              bottom: "auto",
+              marginRight: "-50%",
+              transform: "translate(-50%, -50%)",
+              backgroundColor: "#fff",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              padding: "10px",
+              width: "40%",
+              height: "100%",
+            },
+          }}
+        >
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <button
+                className="close-button"
+                onClick={() => setIsModalOpen(false)}
+              >
+                X
+              </button>
+              <h2>Bill Details</h2>
+              {selectedBill && (
+                <>
+                  <p>
+                    <strong>Bill ID:</strong> {selectedBill.billId}
+                  </p>
+                  <p>
+                    <strong>Cashier ID:</strong> {selectedBill.cashierId}
+                  </p>
+                  <p>
+                    <strong>Branch ID:</strong> {selectedBill.branchId}
+                  </p>
+                  <p>
+                    <strong>Total Amount:</strong> {selectedBill.totalAmount}
+                  </p>
+                  <p>
+                    <strong>Bill Date:</strong> {selectedBill.billDate}
+                  </p>
+                  <p>
+                    <strong>Bill Time:</strong> {selectedBill.billTime}
+                  </p>
+                  <table className="bill-table">
+                    <thead>
+                      <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedBill.items.map((item, index) => (
+                        <tr key={index}>
+                          <td>{item.itemName}</td>
+                          <td>{item.count}</td>
+                          <td>{item.unitPrice}</td>
+                          <td>{item.totalPrice}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </>
+              )}
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="secondary-close-button"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </Modal>
       </div>
     </>
   );
