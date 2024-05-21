@@ -18,7 +18,16 @@ import { CardContent } from "@/components/Card";
 import axios from "axios";
 
 const formSchema = z.object({
-  branchManagerId: z.string(),
+  branchManagerFirstName: z.string().nonempty("First name is required"),
+  branchManagerLastName: z.string().nonempty("Last name is required"),
+  branchManagerEmail: z.string().email("Invalid email address"),
+  branchManagerAddress: z.string().nonempty("Address is required"),
+  branchManagerPhone: z.string().regex(/^\d{10}$/, "Phone number must be exactly 10 digits"),
+  branchManagerDoB: z.string().nonempty("Date of birth is required"),
+  branchManagerGender: z.enum(["Male", "Female", "Other"], {
+    required_error: "Gender is required",
+  }),
+  branchManagerBranch: z.string().nonempty("Branch is required"),
 });
 
 interface BranchManager {
@@ -32,11 +41,18 @@ interface BranchManager {
   branchManagerBranch: string;
 }
 
-export default function Home() {
+export default function EditBranchManager() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      branchManagerId: "",
+      branchManagerFirstName: "",
+      branchManagerLastName: "",
+      branchManagerEmail: "",
+      branchManagerAddress: "",
+      branchManagerPhone: "",
+      branchManagerDoB: "",
+      branchManagerGender: undefined,
+      branchManagerBranch: "",
     },
   });
 
@@ -46,18 +62,29 @@ export default function Home() {
     const id = window.localStorage.getItem("branchManagerId");
     if (!id) return;
     try {
-      const response = await axios.get(`http://localhost:3000/managers/${id}`);
-      setBranchManager(response.data);
+      const response = await axios.get(`http://localhost:3000/branch-manager/${id}`);
+      const managerData = response.data;
+      setBranchManager(managerData);
+      form.reset({
+        branchManagerFirstName: managerData.branchManagerFirstName,
+        branchManagerLastName: managerData.branchManagerLastName,
+        branchManagerEmail: managerData.branchManagerEmail,
+        branchManagerAddress: managerData.branchManagerAddress,
+        branchManagerPhone: managerData.branchManagerPhone,
+        branchManagerDoB: managerData.branchManagerDoB,
+        branchManagerGender: managerData.branchManagerGender,
+        branchManagerBranch: managerData.branchManagerBranch,
+      });
     } catch (error) {
       console.error("Error fetching branch manager:", error);
     }
   };
 
-  const updateBranchManager = async () => {
+  const updateBranchManager = async (data: z.infer<typeof formSchema>) => {
     const id = window.localStorage.getItem("branchManagerId");
-    if (!id || !branchManager) return;
+    if (!id) return;
     try {
-      await axios.put(`http://localhost:3000/managers/${id}`, branchManager);
+      await axios.put(`http://localhost:3000/branch-manager/${id}`, data);
       alert("Branch Manager details updated successfully");
     } catch (error) {
       console.error("Error updating branch manager:", error);
@@ -88,132 +115,114 @@ export default function Home() {
           <CardContent className="lg:col-span-2">
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit((data) => {
-                  fetchBranchManager();
-                })}
+                onSubmit={form.handleSubmit((data) => updateBranchManager(data))}
                 className="max-w-md w-full flex flex-col gap-4"
               >
-                {branchManager && (
-                  <>
+                <FormField
+                  control={form.control}
+                  name="branchManagerFirstName"
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel className="font-bold">First Name</FormLabel>
                       <FormControl>
-                        <Input
-                          value={branchManager.branchManagerFirstName}
-                          onChange={(e) =>
-                            setBranchManager({
-                              ...branchManager,
-                              branchManagerFirstName: e.target.value,
-                            })
-                          }
-                        />
+                        <Input placeholder="First Name" {...field} />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerLastName"
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel className="font-bold">Last Name</FormLabel>
                       <FormControl>
-                        <Input
-                          value={branchManager.branchManagerLastName}
-                          onChange={(e) =>
-                            setBranchManager({
-                              ...branchManager,
-                              branchManagerLastName: e.target.value,
-                            })
-                          }
-                        />
+                        <Input placeholder="Last Name" {...field} />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerEmail"
+                  render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-bold">E-mail</FormLabel>
+                      <FormLabel className="font-bold">Email</FormLabel>
                       <FormControl>
-                        <Input
-                          value={branchManager.branchManagerEmail}
-                          onChange={(e) =>
-                            setBranchManager({
-                              ...branchManager,
-                              branchManagerEmail: e.target.value,
-                            })
-                          }
-                        />
+                        <Input placeholder="Email" {...field} />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerAddress"
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel className="font-bold">Address</FormLabel>
                       <FormControl>
-                        <Input
-                          value={branchManager.branchManagerAddress}
-                          onChange={(e) =>
-                            setBranchManager({
-                              ...branchManager,
-                              branchManagerAddress: e.target.value,
-                            })
-                          }
-                        />
+                        <Input placeholder="Address" {...field} />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerPhone"
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel className="font-bold">Phone</FormLabel>
                       <FormControl>
-                        <Input
-                          value={branchManager.branchManagerPhone}
-                          onChange={(e) =>
-                            setBranchManager({
-                              ...branchManager,
-                              branchManagerPhone: e.target.value,
-                            })
-                          }
-                        />
+                        <Input placeholder="Phone" {...field} />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerDoB"
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel className="font-bold">Date of Birth</FormLabel>
                       <FormControl>
-                        <Input
-                          value={branchManager.branchManagerDoB}
-                          onChange={(e) =>
-                            setBranchManager({
-                              ...branchManager,
-                              branchManagerDoB: e.target.value,
-                            })
-                          }
-                        />
+                        <Input type="date" placeholder="Date of Birth" {...field} />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerGender"
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel className="font-bold">Gender</FormLabel>
                       <FormControl>
-                        <Input
-                          value={branchManager.branchManagerGender}
-                          onChange={(e) =>
-                            setBranchManager({
-                              ...branchManager,
-                              branchManagerGender: e.target.value,
-                            })
-                          }
-                        />
+                        <Input placeholder="Gender" {...field} />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchManagerBranch"
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel className="font-bold">Branch</FormLabel>
                       <FormControl>
-                        <Input
-                          value={branchManager.branchManagerBranch}
-                          onChange={(e) =>
-                            setBranchManager({
-                              ...branchManager,
-                              branchManagerBranch: e.target.value,
-                            })
-                          }
-                        />
+                        <Input placeholder="Branch" {...field} />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
-                  </>
-                )}
-                <Button
-                  type="button"
-                  onClick={updateBranchManager}
-                  className="w-full font-bold"
-                >
+                  )}
+                />
+                <Button type="submit" className="w-full font-bold">
                   Save
                 </Button>
               </form>
