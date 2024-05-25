@@ -26,15 +26,15 @@ import axios from "axios";
 import Image from "next/image";
 
 const formSchema = z.object({
-  cashierId: z.string(),
-  cashierFirstName: z.string(),
-  cashierLastName: z.string(),
-  cashierEmail: z.string(),
-  cashierAddress: z.string(),
-  cashierPhone: z.string(),
-  cashierDoB: z.string(),
-  cashierGender: z.string(),
-  cashierBranch: z.string(),
+  cashierId: z.string().min(1, { message: "Cashier ID is required" }),
+  cashierFirstName: z.string().min(1, { message: "First Name is required" }),
+  cashierLastName: z.string().min(1, { message: "Last Name is required" }),
+  cashierEmail: z.string().email({ message: "Invalid email address" }),
+  cashierAddress: z.string().min(1, { message: "Address is required" }),
+  cashierPhone: z.string().min(10, { message: "Phone number must be at least 10 digits" }),
+  cashierDoB: z.string().refine(val => !isNaN(Date.parse(val)), { message: "Invalid date" }),
+  cashierGender: z.string().min(1, { message: "Gender is required" }),
+  cashierBranch: z.string().min(1, { message: "Branch is required" }),
 });
 
 export default function Home() {
@@ -55,22 +55,19 @@ export default function Home() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-
       const response = await axios.post('http://localhost:3000/cashier', values);
       console.log('Cashier added:', response.data);
       alert(`${response.data.cashierFirstName} added as cashier`);
       form.reset();  // Clear the form after successful submission
-
     } catch (error) {
       console.error("Error adding cashier:", error);
       alert("Error adding cashier to database!");
     }
   };
 
-
   return (
     <div className="flex flex-col gap-5 w-full">
-      <PageTitle title="Add new item" />
+      <PageTitle title="Add new cashier" />
       <section>
         <main className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <CardContent className="lg:col-span-1 flex items-center justify-center">
@@ -201,9 +198,7 @@ export default function Home() {
                           Cashier Date of Birth
                         </FormLabel>
                         <FormControl>
-
                           <Input type="date" placeholder="Date of Birth" {...field} />
-
                         </FormControl>
                         <FormMessage />
                       </FormItem>

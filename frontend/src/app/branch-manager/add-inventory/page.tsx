@@ -24,15 +24,15 @@ import { CardContent } from "@/components/Card";
 import axios from "axios";
 
 const formSchema = z.object({
-  itemID: z.string(),
-  itemName: z.string(),
-  quantity: z.string(),
-  supply: z.string(),
-  date: z.string(),
-  unitPrice: z.string(),
-  sellPrice: z.string(),
-  description: z.string(),
-  category: z.string(),
+  itemID: z.string().min(1, { message: "Item ID is required" }),
+  itemName: z.string().min(1, { message: "Item Name is required" }),
+  quantity: z.string().min(1, { message: "Quantity is required" }).regex(/^\d+$/, { message: "Quantity must be a number" }),
+  supply: z.string().min(1, { message: "Supply is required" }),
+  date: z.string().refine(val => !isNaN(Date.parse(val)), { message: "Invalid date" }),
+  unitPrice: z.string().min(1, { message: "Unit Price is required" }).regex(/^\d+(\.\d{1,2})?$/, { message: "Unit Price must be a number with up to two decimal places" }),
+  sellPrice: z.string().min(1, { message: "Sell Price is required" }).regex(/^\d+(\.\d{1,2})?$/, { message: "Sell Price must be a number with up to two decimal places" }),
+  description: z.string().optional(),
+  category: z.string().min(1, { message: "Category is required" }),
 });
 
 export default function Home() {
@@ -95,9 +95,9 @@ export default function Home() {
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel className="font-bold">Item id</FormLabel>
+                        <FormLabel className="font-bold">Item ID</FormLabel>
                         <FormControl>
-                          <Input placeholder="Item Code" {...field} />
+                          <Input placeholder="Item ID" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -157,7 +157,7 @@ export default function Home() {
                       <FormItem>
                         <FormLabel className="font-bold">Date</FormLabel>
                         <FormControl>
-                          <Input placeholder="Date" {...field} />
+                          <Input type="date" placeholder="Date" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -217,7 +217,7 @@ export default function Home() {
                       <FormItem>
                         <FormLabel className="font-bold">Category</FormLabel>
                         <FormControl>
-                          <Input placeholder="Snacks / BabyProducts / Fashion / Stationary" {...field} />
+                          <Input placeholder="Snacks / Baby Products / Fashion / Stationary" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
