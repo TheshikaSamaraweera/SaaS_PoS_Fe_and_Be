@@ -1,5 +1,6 @@
 "use client";
-import { v4 as uuidv4 } from 'uuid';
+import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,6 +40,7 @@ const formSchema = z.object({
 });
 
 export default function Home() {
+  const [branches, setBranches] = useState<{ _id: string; branchName: string }[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,6 +55,19 @@ export default function Home() {
       branchManagerBranch: "",
     },
   });
+
+  useEffect(() => {
+    const fetchBranches = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/branch');
+        setBranches(response.data);
+      } catch (error) {
+        console.error('Error fetching branches:', error);
+      }
+    };
+
+    fetchBranches();
+  }, []);
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -210,7 +225,18 @@ export default function Home() {
                     <FormItem>
                       <FormLabel className="font-bold">Branch Manager Branch</FormLabel>
                       <FormControl>
-                        <Input placeholder="Branch" {...field} />
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <SelectTrigger>
+                            <Input placeholder="Branch" value={field.value} readOnly />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {branches.map((branch) => (
+                              <SelectItem key={branch._id} value={branch._id}>
+                                {branch.branchName}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage className="text-red-600" />
                     </FormItem>

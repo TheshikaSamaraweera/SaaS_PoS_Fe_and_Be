@@ -1,13 +1,32 @@
-// import { Category } from '../schemas/book.schema';
+import { IsString, IsNotEmpty } from 'class-validator';
+import { Types } from 'mongoose';
 
 export class CreateBranchManagerDto {
-  readonly branchManagerId: string;
-  readonly branchManagerFirstName: string;
-  readonly branchManagerLastName: string;
-  readonly branchManagerEmail: string;
-  readonly branchManagerAddress: string;
-  readonly branchManagerPhone: string;
-  readonly branchManagerDoB: string;
-  readonly branchManagerGender: string;
-  readonly branchManagerBranch: string;
+  @IsString()
+  branchManagerId: string;
+
+  @IsString()
+  branchManagerFirstName: string;
+
+  @IsString()
+  branchManagerLastName: string;
+
+  @IsString()
+  branchManagerEmail: string;
+
+  @IsString()
+  branchManagerAddress: string;
+
+  @IsString()
+  branchManagerPhone: string;
+
+  @IsString()
+  branchManagerDoB: string;
+
+  @IsString()
+  branchManagerGender: string;
+
+  @IsNotEmpty()
+  @IsString()
+  branch: Types.ObjectId;
 }

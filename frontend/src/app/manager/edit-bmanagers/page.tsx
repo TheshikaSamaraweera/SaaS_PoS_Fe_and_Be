@@ -30,6 +30,11 @@ const formSchema = z.object({
   branchManagerBranch: z.string().nonempty("Branch is required"),
 });
 
+interface Branch {
+  _id: string;
+  branchName: string;
+}
+
 interface BranchManager {
   branchManagerFirstName: string;
   branchManagerLastName: string;
@@ -51,34 +56,49 @@ export default function EditBranchManager() {
       branchManagerAddress: "",
       branchManagerPhone: "",
       branchManagerDoB: "",
-      branchManagerGender: undefined,
-      branchManagerBranch: "",
+      branchManagerGender: "Male",
+      branchManagerBranch: "", // Initialize branch manager's branch selection
     },
   });
 
+  const [branches, setBranches] = useState<Branch[]>([]);
   const [branchManager, setBranchManager] = useState<BranchManager | null>(null);
 
-  const fetchBranchManager = async () => {
-    const id = window.localStorage.getItem("branchManagerId");
-    if (!id) return;
-    try {
-      const response = await axios.get(`http://localhost:3000/branch-manager/${id}`);
-      const managerData = response.data;
-      setBranchManager(managerData);
-      form.reset({
-        branchManagerFirstName: managerData.branchManagerFirstName,
-        branchManagerLastName: managerData.branchManagerLastName,
-        branchManagerEmail: managerData.branchManagerEmail,
-        branchManagerAddress: managerData.branchManagerAddress,
-        branchManagerPhone: managerData.branchManagerPhone,
-        branchManagerDoB: managerData.branchManagerDoB,
-        branchManagerGender: managerData.branchManagerGender,
-        branchManagerBranch: managerData.branchManagerBranch,
-      });
-    } catch (error) {
-      console.error("Error fetching branch manager:", error);
-    }
-  };
+  useEffect(() => {
+    const fetchBranchManager = async () => {
+      const id = window.localStorage.getItem("branchManagerId");
+      if (!id) return;
+      try {
+        const response = await axios.get(`http://localhost:3000/branch-manager/${id}`);
+        const managerData: BranchManager = response.data;
+        setBranchManager(managerData);
+        form.reset({
+          branchManagerFirstName: managerData.branchManagerFirstName,
+          branchManagerLastName: managerData.branchManagerLastName,
+          branchManagerEmail: managerData.branchManagerEmail,
+          branchManagerAddress: managerData.branchManagerAddress,
+          branchManagerPhone: managerData.branchManagerPhone,
+          branchManagerDoB: managerData.branchManagerDoB,
+          branchManagerGender: managerData.branchManagerGender as "Male" | "Female" | "Other",
+          branchManagerBranch: managerData.branchManagerBranch,
+        });
+      } catch (error) {
+        console.error("Error fetching branch manager:", error);
+      }
+    };
+
+    const fetchBranches = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/branches");
+        setBranches(response.data);
+      } catch (error) {
+        console.error("Error fetching branches:", error);
+      }
+    };
+
+    fetchBranchManager();
+    fetchBranches();
+  }, [form]);
 
   const updateBranchManager = async (data: z.infer<typeof formSchema>) => {
     const id = window.localStorage.getItem("branchManagerId");
@@ -91,13 +111,9 @@ export default function EditBranchManager() {
     }
   };
 
-  useEffect(() => {
-    fetchBranchManager();
-  }, []);
-
   return (
     <div className="flex flex-col gap-5 w-full">
-      <PageTitle title="Branch Manager Details" />
+      <PageTitle title="Edit Branch Manager Details" />
       <section>
         <main className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <CardContent className="lg:col-span-1 flex items-center justify-center">
@@ -216,7 +232,14 @@ export default function EditBranchManager() {
                     <FormItem>
                       <FormLabel className="font-bold">Branch</FormLabel>
                       <FormControl>
-                        <Input placeholder="Branch" {...field} />
+                        <select {...field} className="input-field">
+                          <option value="">Select Branch</option>
+                          {branches.map((branch) => (
+                            <option key={branch._id} value={branch.branchName}>
+                              {branch.branchName}
+                            </option>
+                          ))}
+                        </select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
