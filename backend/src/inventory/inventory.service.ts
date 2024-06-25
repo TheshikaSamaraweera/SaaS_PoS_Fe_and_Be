@@ -6,7 +6,8 @@ import * as mongoose from 'mongoose';
 @Injectable()
 export class InventoryService {
   constructor(
-    @InjectModel(Inventory.name) private inventoryModel: mongoose.Model<Inventory>,
+    @InjectModel(Inventory.name)
+    private inventoryModel: mongoose.Model<Inventory>,
   ) {}
 
   async findAll(): Promise<Inventory[]> {
@@ -37,5 +38,4 @@ export class InventoryService {
   async deleteById(id: string): Promise<Inventory> {
     return await this.inventoryModel.findByIdAndDelete(id);
   }
-
 }

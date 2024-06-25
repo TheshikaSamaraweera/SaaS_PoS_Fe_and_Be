@@ -9,6 +9,7 @@ import { BillModule } from './bill/bill.module';
 import { BranchManagerModule } from './branchManager/branchManager.module';
 import { BranchModule } from './branch/branch.module';
 import { RequestModule } from './request/request.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RequestModule } from './request/request.module';
     BranchManagerModule,
     BranchModule,
     RequestModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

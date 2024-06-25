@@ -21,7 +21,9 @@ export class InventoryController {
   }
 
   @Post()
-  async createInventory(@Body() inventory: CreateInventoryDto): Promise<Inventory> {
+  async createInventory(
+    @Body() inventory: CreateInventoryDto,
+  ): Promise<Inventory> {
     return this.InventoryService.create(inventory);
   }
 
@@ -42,5 +44,4 @@ export class InventoryController {
   async deleteInventory(@Param('id') id: string): Promise<Inventory> {
     return this.InventoryService.deleteById(id);
   }
-
 }
