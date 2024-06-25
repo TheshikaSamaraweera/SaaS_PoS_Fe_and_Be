@@ -16,6 +16,9 @@ export class Branch extends Document {
 
   @Prop()
   street: string;
+
+  @Prop()
+  branchManager: string
 }
 
 export const BranchSchema = SchemaFactory.createForClass(Branch);
