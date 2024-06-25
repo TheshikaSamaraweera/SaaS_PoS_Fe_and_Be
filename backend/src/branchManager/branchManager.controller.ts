@@ -20,6 +20,7 @@ export class BranchManagerController {
   async getAllBranchManagers(): Promise<BranchManager[]> {
     return this.branchManagerService.findAll();
   }
+
   @Post()
   async createBranchManager(
     @Body()
@@ -27,6 +28,7 @@ export class BranchManagerController {
   ): Promise<BranchManager> {
     return this.branchManagerService.create(branchManager);
   }
+
   @Get(':id')
   async getBranchManager(
     @Param('id')
@@ -34,6 +36,7 @@ export class BranchManagerController {
   ): Promise<BranchManager> {
     return this.branchManagerService.findById(id);
   }
+
   @Put(':id')
   async updateBranchManager(
     @Param('id')
@@ -43,6 +46,7 @@ export class BranchManagerController {
   ): Promise<BranchManager> {
     return this.branchManagerService.updateById(id, branchManager);
   }
+
   @Delete(':id')
   async deleteBranchManager(
     @Param('id')

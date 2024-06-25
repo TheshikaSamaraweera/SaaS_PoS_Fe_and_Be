@@ -1,16 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-
-// export enum Category {
-//   ADVENTURE = 'adventure',
-//   FANTASY = 'fantasy',
-//   HORROR = 'horror',
-//   SCIENCE_FICTION = 'science fiction',
-// }
+import mongoose, { Document } from 'mongoose';
+import { Branch } from '../../branch/schemas/branch.schema';
 
 @Schema({
   timestamps: true,
 })
-export class BranchManager {
+export class BranchManager extends Document {
   @Prop()
   branchManagerId: string;
 
@@ -35,7 +30,8 @@ export class BranchManager {
   @Prop()
   branchManagerGender: string;
 
-  @Prop()
-  branchManagerBranch: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Branch', required: true })
+  branch: Branch;
 }
+
 export const BranchManagerSchema = SchemaFactory.createForClass(BranchManager);

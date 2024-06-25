@@ -1,6 +1,20 @@
+import { IsString, IsOptional } from 'class-validator';
+import { Types } from 'mongoose';
+
 export class CreateBranchDto {
-  readonly branchid: string;
-  readonly branchName: string;
-  readonly city: string;
-  readonly street: string;
+  @IsString()
+  branchid: string;
+
+  @IsString()
+  branchName: string;
+
+  @IsString()
+  city: string;
+
+  @IsString()
+  street: string;
+
+  @IsOptional()
+  @IsString()
+  branchManager: Types.ObjectId;
 }
