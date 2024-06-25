@@ -8,6 +8,7 @@ import { InventoryModule } from './inventory/inventory.module';
 import { BillModule } from './bill/bill.module';
 import { BranchManagerModule } from './branchManager/branchManager.module';
 import { BranchModule } from './branch/branch.module';
+import { RequestModule } from './request/request.module';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { BranchModule } from './branch/branch.module';
     BillModule,
     BranchManagerModule,
     BranchModule,
-
+    RequestModule,
   ],
   controllers: [AppController],
   providers: [AppService],

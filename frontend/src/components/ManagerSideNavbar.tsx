@@ -3,6 +3,8 @@
 
 import { useState } from "react";
 import { Nav } from "./ui/nav";
+import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
 
 type Props = {};
 
@@ -20,18 +22,19 @@ import {
   Warehouse,
   LineChart,
   PackagePlus,
-
-  
 } from "lucide-react";
 import { Button } from "./ui/button";
 
 import { useWindowWidth } from "@react-hook/window-size";
+import { UserButton } from "@clerk/nextjs";
 
 export default function SideNavbar({}: Props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const onlyWidth = useWindowWidth();
   const mobileWidth = onlyWidth < 768;
+
+  
 
   function toggleSidebar() {
     setIsCollapsed(!isCollapsed);
@@ -57,49 +60,53 @@ export default function SideNavbar({}: Props) {
             title: "Dashboard",
             href: "/manager/dashboard",
             icon: LayoutDashboard,
-            variant: "default"
+            variant: "default",
           },
           {
             title: "Items",
             href: "/manager/inventry",
             icon: UsersRound,
-            variant: "ghost"
+            variant: "ghost",
           },
-          
-         
+
           {
             title: "Add-branch",
             href: "/manager/add-branch",
             icon: ClipboardList,
-            variant: "ghost"
+            variant: "ghost",
           },
           {
             title: "Branches",
             href: "/manager/branch",
             icon: ClipboardList,
-            variant: "ghost"
+            variant: "ghost",
           },
           {
             title: "Add Branch Managers",
             href: "/manager/bmanagers",
             icon: PackagePlus,
-            variant: "ghost"
+            variant: "ghost",
           },
           {
             title: "Branch Managers",
             href: "/manager/manager-management",
             icon: Warehouse,
-            variant: "ghost"
+            variant: "ghost",
           },
           {
             title: "Sells",
             href: "/manager/sels",
             icon: LineChart,
-            variant: "ghost"
+            variant: "ghost",
           },
-
         ]}
       />
+      <div>
+        <Link href='/profile'>profile</Link>
+      </div>
+      <div>
+        <UserButton afterSignOutUrl="/"/>
+      </div>
     </div>
   );
 }

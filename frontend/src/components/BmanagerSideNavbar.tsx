@@ -73,6 +73,12 @@ export default function SideNavbar({}: Props) {
             variant: "ghost",
           },
           {
+            title: "Requested Items",
+            href: "/branch-manager/requested-items",
+            icon: LayoutDashboard,
+            variant: "default",
+          },
+          {
             title: "Inventory Items",
             href: "/branch-manager/inventory-items",
             icon: Settings,

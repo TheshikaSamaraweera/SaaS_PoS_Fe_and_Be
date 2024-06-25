@@ -17,6 +17,7 @@ type Branch = {
 type Props = {};
 export default function BranchesPage({}: Props) {
   const [branches, setBranches] = useState<Branch[]>([]);
+
   const columns: ColumnDef<Branch>[] = [
     {
       accessorKey: "branchName",
@@ -40,7 +41,7 @@ export default function BranchesPage({}: Props) {
             onClick={() => {
               if (window.confirm(`Do you want to edit ${row.original.branchName}?`)) {
                 window.localStorage.setItem("branchId", row.original._id);
-                window.location.href = "/manager/edit-braches";
+                window.location.href = "/manager/edit-branches";
               }
             }}
           >
@@ -84,10 +85,16 @@ export default function BranchesPage({}: Props) {
       .then((data) => setBranches(data));
   }, []);
 
+  const handleRowClick = (row: Branch) => {
+    //window.location.href = `/manager/branch/${row._id}`;
+    window.location.href = `../branch-manager/dashboard`;
+
+  };
+
   return (
     <div className="flex flex-col gap-5 w-full">
       <PageTitle title="Branches" />
-      <DataTable columns={columns} data={branches} />
+      <DataTable columns={columns} data={branches} onRowClick={handleRowClick} />
     </div>
   );
 }

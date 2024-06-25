@@ -42,8 +42,8 @@ export default function Home() {
   };
 
   const totalAmount = selectedItems.reduce((total, item) => {
-    return total + parseFloat(item.amount.replace("Rs. ", ""));
-  }, 0);
+  return total + item.amount;
+}, 0);
 
   const fetchItems = async () => {
     try {
@@ -82,7 +82,7 @@ export default function Home() {
     ? allItems.filter(
         (item) =>
           item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          item.code.toLowerCase().includes(searchQuery.toLowerCase())
+          item.code?.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : cardData[selectedCategory];
 

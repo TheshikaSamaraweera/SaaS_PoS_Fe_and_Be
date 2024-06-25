@@ -11,6 +11,7 @@ interface BillDetails {
   billId: string;
   cashierId: string;
   branchId: string;
+  companyId: string;
   items: BillItem[];
   totalAmount: number;
 }
@@ -33,7 +34,7 @@ const BillProcess: React.FC<BillProcessProps> = ({
   const handlePrint = async () => {
     try {
       const now = new Date();
-      const month = String(now.getMonth() + 1).padStart(2, "0"); // months from 1-12
+      const month = String(now.getMonth() + 1).padStart(2, "0");
       const day = String(now.getDate()).padStart(2, "0");
       const year = now.getFullYear();
 
@@ -52,6 +53,7 @@ const BillProcess: React.FC<BillProcessProps> = ({
           billId: billDetails.billId,
           cashierId: billDetails.cashierId,
           branchId: billDetails.branchId,
+          companyId: billDetails.companyId,
           items: billDetails.items.map((item) => ({
             itemName: item.label,
             unitPrice: item.amount,
@@ -129,10 +131,7 @@ const BillProcess: React.FC<BillProcessProps> = ({
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <button className="close-button" onClick={onClose}>
-          X
-        </button>
-        <h2>Invoice</h2>
+        <h2 className="font-bold">Invoice</h2>
         <p>
           <strong>Bill ID:</strong> {billDetails.billId}
         </p>
@@ -141,6 +140,9 @@ const BillProcess: React.FC<BillProcessProps> = ({
         </p>
         <p>
           <strong>Branch ID:</strong> {billDetails.branchId}
+        </p>
+        <p>
+          <strong>Company ID:</strong> {billDetails.companyId}
         </p>
         <table className="bill-table">
           <thead>

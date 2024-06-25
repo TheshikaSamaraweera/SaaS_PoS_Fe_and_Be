@@ -33,10 +33,10 @@ const BillDetailsPopup: React.FC<BillDetailsPopupProps> = ({
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <button className="close-button" onClick={onClose}>
+        {/* <button className="close-button" onClick={onClose}>
           X
-        </button>
-        <h2>Invoice</h2>
+        </button> */}
+        <h2 className="font-bold">Invoice</h2>
         <p>
           <strong>Bill ID:</strong> {billDetails.billId}
         </p>

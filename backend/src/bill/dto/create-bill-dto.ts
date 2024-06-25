@@ -19,5 +19,6 @@ export class CreateBillDto {
   readonly billTime: string;
   readonly cashierId: string;
   readonly branchId: string;
+  readonly companyId: string;
   readonly items: ItemDto[];
 }

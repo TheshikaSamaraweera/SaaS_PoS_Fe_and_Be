@@ -45,6 +45,9 @@ export class Bill {
   @Prop()
   branchId: string;
 
+  @Prop()
+  companyId: string;
+
   @Prop({ type: [ItemSchema] })
   items: Item[];
 }

@@ -56,7 +56,8 @@
   width: 100%;
 }
 
-.print-button, .clear-button {
+.print-button,
+.clear-button {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -66,7 +67,7 @@
 }
 
 .print-button {
-  background-color: #007BFF;
+  background-color: #007bff;
   color: white;
 }
 
@@ -83,11 +84,11 @@
   background-color: #c82333;
 }
 .close-button {
-  width: 20px; 
-  height: 20px; 
-  font-size: 12px; /* if it's a text-based button */
-  width: 20px; /* if it's an image-based button */
-  height: 20px; /* if it's an image-based button */
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
   margin-left: auto;
   padding-right: 5px;
 }
@@ -125,10 +126,12 @@ p.left-align {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
 .modal-content {
@@ -160,7 +163,7 @@ p.left-align {
 }
 
 .print-button {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   padding: 5px 10px;

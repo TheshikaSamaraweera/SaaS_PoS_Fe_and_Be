@@ -1,9 +1,3 @@
-/**
- * eslint-disable @next/next/no-img-element
- *
- * @format
- */
-
 /** @format */
 "use client";
 

@@ -27,8 +27,9 @@ export default function Home() {
   const [selectedItems, setSelectedItems] = useState<CardProps[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [billId, setBillId] = useState(nanoid());
-  const [cashierId, setCashierId] = useState("");
-  const [branchId, setBranchId] = useState("");
+  const [cashierId, setCashierId] = useState("CAS001");
+  const [branchId, setBranchId] = useState("BRN001");
+  const [companyId, setCompanyId] = useState("COM001");
   const [cardData, setCardData] = useState<{ [key: string]: CardProps[] }>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -40,9 +41,6 @@ export default function Home() {
     setSelectedCategory(category);
   };
 
-  // const handleCardClick = (card: CardProps) => {
-  //   setSelectedItems([...selectedItems, { ...card, id: Date.now() }]);
-  // };
   const handleCardClick = (card: CardProps) => {
     const existingItem = selectedItems.find(
       (item) => item.label === card.label
@@ -80,6 +78,16 @@ export default function Home() {
     );
   };
 
+  const handleIncreaseClick = (itemToIncrease: CardProps) => {
+    setSelectedItems(
+      selectedItems.map((item) =>
+        item.id === itemToIncrease.id && item.count && item.count >= 1
+          ? { ...item, count: item.count + 1 }
+          : item
+      )
+    );
+  };
+
   const totalAmount = selectedItems.reduce((total, item) => {
     return total + Number(item.amount) * (item.count || 1);
   }, 0);
@@ -89,7 +97,7 @@ export default function Home() {
       const response = await fetch("http://localhost:3000/inventory");
       const data = await response.json();
       const categorizedData = data.reduce((acc: any, item: any) => {
-        const category = item.category; //.toLowerCase();
+        const category = item.category;
         const cardItem = {
           label: item.itemName,
           code: item.itemID,
@@ -117,59 +125,10 @@ export default function Home() {
       setCashierId(value);
     } else if (name === "branchId") {
       setBranchId(value);
+    } else if (name === "companyId") {
+      setCompanyId(value);
     }
-    // } else {
-    //   setSearchTerm(value);    //change number 01
-    // }
   };
-
-  // const printBill = async () => {
-  //   try {
-  //     const now = new Date();
-  //     // const localDate = now.toLocaleDateString("en-US", {
-  //     //   timeZone: "Asia/Kolkata",
-  //     // });
-  //     const month = String(now.getMonth() + 1).padStart(2, "0"); // months from 1-12
-  //     const day = String(now.getDate()).padStart(2, "0");
-  //     const year = now.getFullYear();
-
-  //     const localDate = month + day + year;
-  //     const localTime = now.toLocaleTimeString("en-US", {
-  //       timeZone: "Asia/Kolkata",
-  //       hour12: false,
-  //     });
-  //     const response = await fetch("http://localhost:3000/bill", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         billId: billId,
-  //         cashierId: cashierId,
-  //         branchId: branchId,
-  //         items: selectedItems.map((item) => ({
-  //           itemName: item.label,
-  //           unitPrice: item.amount,
-  //           count: item.count || 1,
-  //           totalPrice: Number(item.amount) * (item.count || 1),
-  //         })),
-  //         totalAmount: totalAmount.toFixed(2),
-  //         billDate: localDate,
-  //         billTime: localTime,
-  //       }),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("HTTP error " + response.status);
-  //     }
-
-  //     window.print();
-  //     setBillId(nanoid());
-  //     setSelectedItems([]);
-  //   } catch (error) {
-  //     console.error("Error saving bill:", error);
-  //   }
-  // };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -186,14 +145,16 @@ export default function Home() {
   const resetPos = () => {
     setSelectedItems([]);
     setBillId(nanoid());
-    setCashierId("");
-    setBranchId("");
+    setCashierId("CAS001");
+    setBranchId("BRN001");
+    setCompanyId("COM001");
   };
 
   const billDetails = {
     billId,
     cashierId,
     branchId,
+    companyId,
     items: selectedItems.map((item) => ({
       label: item.label,
       amount: item.amount,
@@ -208,6 +169,37 @@ export default function Home() {
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="printable-section w-full">
           <CardContent className="lg:col-span-1">
+            <section>
+            <div className="flex justify-between w-full">
+                  <select
+                    name="cashierId"
+                    onChange={handleInputChange}
+                    defaultValue="CAS001"
+                  >
+                    <option value="CAS001">CAS001</option>
+                    <option value="CAS002">CAS002</option>
+                    <option value="CAS003">CAS003</option>
+                  </select>
+                  <select
+                    name="branchId"
+                    onChange={handleInputChange}
+                    defaultValue="BRN001"
+                  >
+                    <option value="BRN001">BRN001</option>
+                    <option value="BRN002">BRN002</option>
+                    <option value="BRN003">BRN003</option>
+                  </select>
+                  <select
+                    name="companyId"
+                    onChange={handleInputChange}
+                    defaultValue="COM001"
+                  >
+                    <option value="COM001">COM001</option>
+                    <option value="COM002">COM002</option>
+                    <option value="COM003">COM003</option>
+                  </select>
+                </div>
+            </section>
             <CardContent>
               <section className="flex flex-col items-center p-1 w-full">
                 <h2 className="font-bold">Bill</h2>
@@ -217,20 +209,6 @@ export default function Home() {
                   <span className="time-span">
                     Time: {new Date().toLocaleTimeString()}
                   </span>
-                </div>
-                <div className="flex justify-between w-full">
-                  <select name="cashierId" onChange={handleInputChange}>
-                    <option value="">Cashier ID</option>
-                    <option value="CAS001">CAS001</option>
-                    <option value="CAS002">CAS002</option>
-                    <option value="CAS003">CAS003</option>
-                  </select>
-                  <select name="branchId" onChange={handleInputChange}>
-                    <option value="">Branch ID</option>
-                    <option value="BRN001">BRN001</option>
-                    <option value="BRN002">BRN002</option>
-                    <option value="BRN003">BRN003</option>
-                  </select>
                 </div>
                 {selectedItems.map((item, index) => (
                   <div className="item-info" key={index}>
@@ -242,6 +220,12 @@ export default function Home() {
                         Rs. {item.amount * (item.count || 1)}
                         {"  "}
                       </span>
+                      <button
+                        className="close-button"
+                        onClick={() => handleIncreaseClick(item)}
+                      >
+                        <img src="/images/arrow.png" alt="Increase Item" />
+                      </button>
                       <button
                         className="close-button"
                         onClick={() => handleDecreaseClick(item)}

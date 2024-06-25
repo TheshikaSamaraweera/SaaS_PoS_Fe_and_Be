@@ -22,6 +22,7 @@ export default function TableDemo() {
     cashierId: number;
     totalAmount: number;
     branchId: number;
+    companyId: string;
     billDate: string;
     billTime: string;
     items: Item[];
@@ -39,6 +40,7 @@ export default function TableDemo() {
     cashierId: number;
     totalAmount: string;
     branchId: number;
+    companyId: string;
     billDate: string;
     billTime: string;
     items: Item[];
@@ -61,6 +63,7 @@ export default function TableDemo() {
       cashierId: bill.cashierId,
       totalAmount: `Rs. ${bill.totalAmount.toFixed(2)}`,
       branchId: bill.branchId,
+      companyId: bill.companyId,
       billDate: bill.billDate,
       billTime: bill.billTime,
       items: bill.items,
@@ -108,6 +111,7 @@ export default function TableDemo() {
               <TableHead className="w-[100px] font-bold">Customer ID</TableHead>
               <TableHead className="font-bold">Cashier</TableHead>
               <TableHead className="font-bold">Branch</TableHead>
+              <TableHead className="font-bold">Company</TableHead>
               <TableHead className="text-right font-bold">Date</TableHead>
               <TableHead className="text-right font-bold">Time</TableHead>
               <TableHead className="text-right font-bold">Amount</TableHead>
@@ -132,11 +136,17 @@ export default function TableDemo() {
                   </TableCell>
                   <TableCell>{invoice.cashierId}</TableCell>
                   <TableCell>{invoice.branchId}</TableCell>
+                  <TableCell>{invoice.companyId}</TableCell>
                   <TableCell className="text-right">
-                    {`${invoice.billDate.slice(0, 2)}/${invoice.billDate.slice(
-                      2,
-                      4
-                    )}/${invoice.billDate.slice(4)}`}
+                    {invoice.billDate
+                      ? `${invoice.billDate.slice(
+                          0,
+                          2
+                        )}/${invoice.billDate.slice(
+                          2,
+                          4
+                        )}/${invoice.billDate.slice(4)}`
+                      : "Date not available"}
                   </TableCell>
                   <TableCell className="text-right">
                     {invoice.billTime}

@@ -18,8 +18,6 @@ import {
   ClipboardList,
   File,
   PackagePlus,
-
-  
 } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -55,42 +53,38 @@ export default function SideNavbar({}: Props) {
             title: "Dashboard",
             href: "/cashier/dashboard",
             icon: LayoutDashboard,
-            variant: "default"
+            variant: "default",
           },
           {
-
             title: "PoS",
             href: "/cashier/pos",
             icon: Calculator,
-            variant: "ghost"
+            variant: "ghost",
           },
           {
             title: "Store",
             href: "/cashier/store",
             icon: ClipboardList,
-            variant: "ghost"
+            variant: "ghost",
           },
           {
             title: "Item List",
             href: "/cashier/itemlist",
             icon: UsersRound,
-            variant: "ghost"
+            variant: "ghost",
           },
           {
             title: "Request Item",
-            href: "/cashier/addnewitem",
+            href: "/cashier/requestItem",
             icon: PackagePlus,
-            variant: "ghost"
+            variant: "ghost",
           },
           {
             title: "Report",
             href: "/cashier/report",
             icon: File,
-            variant: "ghost"
+            variant: "ghost",
           },
-          
-
-
         ]}
       />
     </div>

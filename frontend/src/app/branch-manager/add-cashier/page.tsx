@@ -1,7 +1,7 @@
 "use client";
 
 import * as z from "zod";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form"; //used controller in bracker - Controller
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -13,13 +13,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  SelectValue,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  Select,
-} from "@/components/ui/select";
 import PageTitle from "@/components/PageTitle";
 import { CardContent } from "@/components/Card";
 import axios from "axios";
