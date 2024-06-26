@@ -94,7 +94,7 @@ const RegisterPage = () => {
               htmlFor="firstName"
               className="block mb-2 text-sm font-medium text-gray-900"
             >
-              First Name
+              Company Name
             </label>
             <input
               type="text"
@@ -110,7 +110,7 @@ const RegisterPage = () => {
               htmlFor="lastName"
               className="block mb-2 text-sm font-medium text-gray-900"
             >
-              Last Name
+              Branch Name
             </label>
             <input
               type="text"
@@ -126,7 +126,7 @@ const RegisterPage = () => {
               htmlFor="username"
               className="block mb-2 text-sm font-medium text-gray-900"
             >
-              User Name
+              User Role
             </label>
             <input
               type="text"
