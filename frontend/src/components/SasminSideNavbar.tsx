@@ -63,17 +63,12 @@ export default function SideNavbar({}: Props) {
           },
 
           {
-            title: "Branches",
-            href: "/register",
+            title: "Section Managment",
+            href: "https://dashboard.clerk.com/apps/app_2iKRQ4sWVfr9GhY4Omd4TU1zhwv/instances/ins_2iKRQCwbo4DD3ii8aJDQ78HBu7W",
             icon: Calculator,
             variant: "ghost",
           },
-          {
-            title: "Managers",
-            href: "/register",
-            icon: ClipboardList,
-            variant: "ghost",
-          },
+         
         ]}
       />
     </div>
