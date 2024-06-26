@@ -48,13 +48,26 @@ export default function TableDemo() {
 
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedCashier, setSelectedCashier] = useState<string>("");
+  const [selectedBranch, setSelectedBranch] = useState<string>("");
   const [selectedBill, setSelectedBill] = useState<Invoice | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchBills = async (billDate?: string) => {
-    const url = billDate
-      ? `http://localhost:3000/bill/date/${billDate}`
-      : "http://localhost:3000/bill";
+  const fetchBills = async (
+    billDate?: string,
+    cashierId?: string,
+    branchId?: string
+  ) => {
+    let url = "http://localhost:3000/bill";
+
+    if (billDate) {
+      url = `http://localhost:3000/bill/date/${billDate}`;
+    } else if (cashierId) {
+      url = `http://localhost:3000/bill/cashier/${cashierId}`;
+    } else if (branchId) {
+      url = `http://localhost:3000/bill/branch/${branchId}`;
+    }
+
     const response = await fetch(url);
     const data: Bill[] = await response.json();
 
@@ -80,7 +93,19 @@ export default function TableDemo() {
     const [year, month, day] = date.split("-");
     const formattedDate = `${month}${day}${year}`; // Format the date as "MMDDYYYY"
     setSelectedDate(formattedDate);
-    fetchBills(formattedDate);
+    fetchBills(formattedDate, selectedCashier, selectedBranch);
+  };
+
+  const handleCashierChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const cashierId = event.target.value;
+    setSelectedCashier(cashierId);
+    fetchBills(selectedDate, cashierId, selectedBranch);
+  };
+
+  const handleBranchChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const branchId = event.target.value;
+    setSelectedBranch(branchId);
+    fetchBills(selectedDate, selectedCashier, branchId);
   };
 
   return (
@@ -92,16 +117,48 @@ export default function TableDemo() {
       <div>
         <PageTitle title="Sales Report" />
 
-        <div className="mb-4">
-          <label htmlFor="date" className="mr-2">
-            Filter:
-          </label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            onChange={handleDateChange}
-          />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "1rem",
+          }}
+        >
+          <div className="mb-4">
+            <label htmlFor="date" className="mr-2">
+              Filter by Date:
+            </label>
+            <input
+              type="date"
+              id="date"
+              name="date"
+              onChange={handleDateChange}
+            />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="cashier" className="mr-2">
+              Filter by Cashier:
+            </label>
+            <select id="cashier" name="cashier" onChange={handleCashierChange}>
+              <option value="">All</option>
+              <option value="CAS001">CAS001</option>
+              <option value="CAS002">CAS002</option>
+              <option value="CAS003">CAS003</option>
+            </select>
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="branch" className="mr-2">
+              Filter by Branch:
+            </label>
+            <select id="branch" name="branch" onChange={handleBranchChange}>
+              <option value="">All</option>
+              <option value="BRN001">BRN001</option>
+              <option value="BRN002">BRN002</option>
+              <option value="BRN003">BRN003</option>
+            </select>
+          </div>
         </div>
 
         <Table>
