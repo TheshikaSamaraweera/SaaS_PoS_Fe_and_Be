@@ -25,12 +25,18 @@ import { UserRoleCard } from "./user-role-card";
 
 export default function SideNavbar({}: Props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [showUserRoleCard, setShowUserRoleCard] = useState(true);
 
   const onlyWidth = useWindowWidth();
   const mobileWidth = onlyWidth < 768;
 
   function toggleSidebar() {
     setIsCollapsed(!isCollapsed);
+    setShowUserRoleCard(!showUserRoleCard);
+  }
+
+  function toggleUserRoleCard() {
+    setShowUserRoleCard(!showUserRoleCard);
   }
 
   return (
