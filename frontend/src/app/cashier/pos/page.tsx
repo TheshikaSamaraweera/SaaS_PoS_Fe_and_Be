@@ -16,26 +16,51 @@ import { SubNav } from "./sub-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
-import { any, string } from "zod";
 import "../../../../styles/pos.css";
 import Image from "next/image";
 import { nanoid } from "nanoid";
 import BillProcess from "../../../components/bill-process";
+import { useUser } from "@clerk/nextjs";
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("Snacks");
   const [selectedItems, setSelectedItems] = useState<CardProps[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [billId, setBillId] = useState(nanoid());
-  const [cashierId, setCashierId] = useState("CAS001");
-  const [branchId, setBranchId] = useState("BRN001");
-  const [companyId, setCompanyId] = useState("COM001");
+  const [cashierId, setCashierId] = useState("");
+  const [branchId, setBranchId] = useState("");
+  const [companyId, setCompanyId] = useState("");
   const [cardData, setCardData] = useState<{ [key: string]: CardProps[] }>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [userDetails, setUserDetails] = useState<{
+    firstName: string;
+    lastName: string;
+    userName: string;
+  } | null>(null);
+  const { user } = useUser();
 
   useEffect(() => {
     fetchItems();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      const { firstName, lastName, username } = user;
+      setUserDetails({
+        firstName: firstName || "",
+        lastName: lastName || "",
+        userName: username || "",
+      });
+      setCashierId(username || "");
+      setBranchId(lastName || "");
+      setCompanyId(firstName || "");
+      console.log("User Details:", {
+        firstName: firstName || "",
+        lastName: lastName || "",
+        userName: username || "",
+      });
+    }
+  }, [user]);
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
@@ -145,9 +170,9 @@ export default function Home() {
   const resetPos = () => {
     setSelectedItems([]);
     setBillId(nanoid());
-    setCashierId("CAS001");
-    setBranchId("BRN001");
-    setCompanyId("COM001");
+    setCashierId(userDetails?.userName || "");
+    setBranchId(userDetails?.lastName || "");
+    setCompanyId(userDetails?.firstName || "");
   };
 
   const billDetails = {
@@ -170,35 +195,35 @@ export default function Home() {
         <div className="printable-section w-full">
           <CardContent className="lg:col-span-1">
             <section>
-            <div className="flex justify-between w-full">
-                  <select
-                    name="cashierId"
-                    onChange={handleInputChange}
-                    defaultValue="CAS001"
-                  >
-                    <option value="CAS001">CAS001</option>
-                    <option value="CAS002">CAS002</option>
-                    <option value="CAS003">CAS003</option>
-                  </select>
-                  <select
-                    name="branchId"
-                    onChange={handleInputChange}
-                    defaultValue="BRN001"
-                  >
-                    <option value="BRN001">BRN001</option>
-                    <option value="BRN002">BRN002</option>
-                    <option value="BRN003">BRN003</option>
-                  </select>
-                  <select
-                    name="companyId"
-                    onChange={handleInputChange}
-                    defaultValue="COM001"
-                  >
-                    <option value="COM001">COM001</option>
-                    <option value="COM002">COM002</option>
-                    <option value="COM003">COM003</option>
-                  </select>
-                </div>
+              <div className="flex justify-between w-full">
+                <select
+                  name="cashierId"
+                  onChange={handleInputChange}
+                  value={cashierId}
+                >
+                  <option value="CAS001">CAS001</option>
+                  <option value="CAS002">CAS002</option>
+                  <option value="CAS003">CAS003</option>
+                </select>
+                <select
+                  name="branchId"
+                  onChange={handleInputChange}
+                  value={branchId}
+                >
+                  <option value="BRN001">BRN001</option>
+                  <option value="BRN002">BRN002</option>
+                  <option value="BRN003">BRN003</option>
+                </select>
+                <select
+                  name="companyId"
+                  onChange={handleInputChange}
+                  value={companyId}
+                >
+                  <option value="COM001">COM001</option>
+                  <option value="COM002">COM002</option>
+                  <option value="COM003">COM003</option>
+                </select>
+              </div>
             </section>
             <CardContent>
               <section className="flex flex-col items-center p-1 w-full">
