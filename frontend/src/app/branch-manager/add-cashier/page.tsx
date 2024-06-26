@@ -27,7 +27,9 @@ const formSchema = z.object({
   cashierPhone: z.string().min(10, { message: "Phone number must be at least 10 digits" }),
   cashierDoB: z.string().refine(val => !isNaN(Date.parse(val)), { message: "Invalid date" }),
   cashierGender: z.string().min(1, { message: "Gender is required" }),
-  cashierBranch: z.string().min(1, { message: "Branch is required" }),
+  cashierBranch: z.string()
+    .min(1, { message: "Branch is required" })
+    .transform(str => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase())
 });
 
 export default function Home() {

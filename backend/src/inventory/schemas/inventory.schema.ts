@@ -30,6 +30,9 @@ export class Inventory {
 
   @Prop()
   category: string;
+
+  @Prop()
+  branchName: string;
 }
 
 export const InventorySchema = SchemaFactory.createForClass(Inventory);

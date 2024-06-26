@@ -8,4 +8,5 @@ export class CreateInventoryDto {
   readonly sellPrice: number;
   readonly description: string;
   readonly category: string;
+  readonly branchName: string;
 }

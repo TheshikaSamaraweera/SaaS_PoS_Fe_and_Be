@@ -33,6 +33,7 @@ const formSchema = z.object({
   sellPrice: z.string().min(1, { message: "Sell Price is required" }).regex(/^\d+(\.\d{1,2})?$/, { message: "Sell Price must be a number with up to two decimal places" }),
   description: z.string().optional(),
   category: z.string().min(1, { message: "Category is required" }),
+  branchName: z.string().min(1, { message: "Branch Name is required" })
 });
 
 export default function Home() {
@@ -48,6 +49,7 @@ export default function Home() {
       sellPrice: "",
       description: "",
       category: "",
+      branchName: "",
     },
   });
 
@@ -218,6 +220,21 @@ export default function Home() {
                         <FormLabel className="font-bold">Category</FormLabel>
                         <FormControl>
                           <Input placeholder="Snacks / Baby Products / Fashion / Stationary" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="branchName"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel className="font-bold">Branch Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Branch Name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
