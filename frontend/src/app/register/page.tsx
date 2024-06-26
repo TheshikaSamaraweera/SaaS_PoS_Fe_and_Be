@@ -8,6 +8,7 @@ const RegisterPage = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
+  const [role, setRole] = useState("Manager");
   const [lastName, setLastName] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +27,7 @@ const RegisterPage = () => {
 
     try {
       await signUp.create({
-        firstName: firstName,
+        firstName: role,
         lastName: lastName,
         username: userName,
         emailAddress: email,
@@ -59,7 +60,8 @@ const RegisterPage = () => {
         console.log(JSON.stringify(completeSignUp, null, 2));
       }
       if (completeSignUp.status === "complete") {
-        await setActive({ session: completeSignUp.createdSessionId });
+        // User account is verified, redirect to sign-in page
+        router.push("/sign-in");
 
         // Send user details to the backend
         await fetch("http://localhost:3000/users", {
@@ -68,7 +70,7 @@ const RegisterPage = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            firstName,
+            firstName: role,
             lastName,
             userName,
             email,
@@ -91,26 +93,24 @@ const RegisterPage = () => {
         {!pendingVerification && (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label
-                htmlFor="firstName"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
+              <label htmlFor="role" className="block mb-2 text-sm font-medium text-gray-900">
                 User Role
               </label>
-              <input
-                type="text"
-                name="firstName"
-                id="firstName"
-                onChange={(e) => setFirstName(e.target.value)}
+              <select
+                name="role"
+                id="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                required={true}
-              />
+                required
+              >
+                <option value="Manager">Manager</option>
+                <option value="Branch Manager">Branch Manager</option>
+                <option value="Cashier">Cashier</option>
+              </select>
             </div>
             <div>
-              <label
-                htmlFor="lastName"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
+              <label htmlFor="lastName" className="block mb-2 text-sm font-medium text-gray-900">
                 Branch Name
               </label>
               <input
@@ -119,14 +119,11 @@ const RegisterPage = () => {
                 id="lastName"
                 onChange={(e) => setLastName(e.target.value)}
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                required={true}
+                required
               />
             </div>
             <div>
-              <label
-                htmlFor="username"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
+              <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">
                 Company Name
               </label>
               <input
@@ -135,14 +132,11 @@ const RegisterPage = () => {
                 id="username"
                 onChange={(e) => setUserName(e.target.value)}
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                required={true}
+                required
               />
             </div>
             <div>
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
+              <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">
                 Email Address
               </label>
               <input
@@ -152,14 +146,11 @@ const RegisterPage = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                 placeholder="name@company.com"
-                required={true}
+                required
               />
             </div>
             <div>
-              <label
-                htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
+              <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">
                 Password
               </label>
               <input
@@ -168,7 +159,7 @@ const RegisterPage = () => {
                 id="password"
                 onChange={(e) => setPassword(e.target.value)}
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                required={true}
+                required
               />
             </div>
             <button

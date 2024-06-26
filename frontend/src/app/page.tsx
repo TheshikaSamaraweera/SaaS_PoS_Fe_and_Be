@@ -28,7 +28,7 @@ export default function Home() {
       <img src="/images/4.png" alt="Company Logo" className="h-16 w-auto" />
     </div>
     <nav className="flex space-x-4">
-      <a href="/manager/dashboard" className="border border-blue-600 bg-white hover:bg-blue-600 text-blue-600 hover:text-white py-3 px-6 rounded-lg shadow-md mt-6 transition duration-300 ease-in-out">
+      <a href="/sign-in" className="border border-blue-600 bg-white hover:bg-blue-600 text-blue-600 hover:text-white py-3 px-6 rounded-lg shadow-md mt-6 transition duration-300 ease-in-out">
         Use App
       </a>
       <a href="/payment" className="border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white hover:text-white py-3 px-6 rounded-lg shadow-md mt-6 transition duration-300 ease-in-out">
