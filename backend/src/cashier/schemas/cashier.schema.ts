@@ -30,7 +30,6 @@ export class Cashier {
 
   @Prop()
   cashierBranch: string;
-
 }
 
 export const CashierSchema = SchemaFactory.createForClass(Cashier);

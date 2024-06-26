@@ -9,7 +9,11 @@ import { BillModule } from './bill/bill.module';
 import { BranchManagerModule } from './branchManager/branchManager.module';
 import { BranchModule } from './branch/branch.module';
 import { RequestModule } from './request/request.module';
+<<<<<<< Updated upstream
 import { CategoriesModule } from './categories/categories.module';
+=======
+import { UsersModule } from './users/users.module';
+>>>>>>> Stashed changes
 
 @Module({
   imports: [
@@ -24,7 +28,11 @@ import { CategoriesModule } from './categories/categories.module';
     BranchManagerModule,
     BranchModule,
     RequestModule,
+<<<<<<< Updated upstream
     CategoriesModule,
+=======
+    UsersModule,
+>>>>>>> Stashed changes
   ],
   controllers: [AppController],
   providers: [AppService],

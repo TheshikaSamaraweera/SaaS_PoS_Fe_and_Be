@@ -27,6 +27,10 @@ export class InventoryService {
     }
     return inventory;
   }
+  async findAllBranchNames(): Promise<string[]> {
+    const branches = await this.inventoryModel.distinct('branchName').exec();
+    return branches.map((branch) => branch.toString());
+  }
 
   async updateById(id: string, Inventory: Inventory): Promise<Inventory> {
     return await this.inventoryModel.findByIdAndUpdate(id, Inventory, {
