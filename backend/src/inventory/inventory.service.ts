@@ -6,7 +6,8 @@ import * as mongoose from 'mongoose';
 @Injectable()
 export class InventoryService {
   constructor(
-    @InjectModel(Inventory.name) private inventoryModel: mongoose.Model<Inventory>,
+    @InjectModel(Inventory.name)
+    private inventoryModel: mongoose.Model<Inventory>,
   ) {}
 
   async findAll(): Promise<Inventory[]> {
