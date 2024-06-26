@@ -1,5 +1,7 @@
 import React from "react";
 import "../../styles/pos.css";
+import { useUser } from "@clerk/nextjs";
+import { useState, useEffect } from "react";
 
 interface BillItem {
   label: string;
@@ -128,6 +130,29 @@ const BillProcess: React.FC<BillProcessProps> = ({
     onClose();
   };
 
+  const [userDetails, setUserDetails] = useState<{
+    firstName: string;
+    lastName: string;
+    userName: string;
+  } | null>(null);
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (user) {
+      const { firstName, lastName, username } = user;
+      setUserDetails({
+        firstName: firstName || "",
+        lastName: lastName || "",
+        userName: username || "",
+      });
+      console.log("User Details:", {
+        firstName: firstName || "",
+        lastName: lastName || "",
+        userName: username || "",
+      });
+    }
+  }, [user]);
+
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -136,13 +161,13 @@ const BillProcess: React.FC<BillProcessProps> = ({
           <strong>Bill ID:</strong> {billDetails.billId}
         </p>
         <p>
-          <strong>Cashier ID:</strong> {billDetails.cashierId}
+          <strong>Cashier ID:</strong> {userDetails?.userName}
         </p>
         <p>
-          <strong>Branch ID:</strong> {billDetails.branchId}
+          <strong>Branch ID:</strong> {userDetails?.lastName}
         </p>
         <p>
-          <strong>Company ID:</strong> {billDetails.companyId}
+          <strong>Company ID:</strong> {userDetails?.firstName}
         </p>
         <table className="bill-table">
           <thead>

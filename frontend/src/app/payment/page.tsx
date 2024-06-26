@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import md5 from 'crypto-js/md5';
 import axios from 'axios';
+import { FaCreditCard } from 'react-icons/fa';
 
 const Payment: React.FC = () => {
   let merchantSecret = 'MTkzMDgyNDE2NDIwNzQyNTk4MDczNTExODk4NTI4Mzk5NjYzNjk4Mw==';
@@ -106,8 +107,12 @@ const Payment: React.FC = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <form onSubmit={handleSubmit} style={styles.form}>
+    <div className="max-w-lg mx-auto mt-12 p-6 bg-gray-100 shadow-md rounded-lg">
+      <div className="flex items-center justify-center mb-6">
+        <h2 className="text-2xl font-semibold text-gray-800 mr-2">Pay for Your App</h2>
+        <FaCreditCard className="text-xl text-gray-800" />
+      </div>
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-6">
         <input type="hidden" name="merchant_id" value={formData.merchant_id} />
         <input type="hidden" name="return_url" value={formData.return_url} />
         <input type="hidden" name="cancel_url" value={formData.cancel_url} />
@@ -116,33 +121,105 @@ const Payment: React.FC = () => {
         <input type="hidden" name="order_id" value={formData.order_id} />
         <input type="hidden" name="hash" value={formData.hash} />
 
-        <h2 style={styles.header}>Payment Details</h2>
-
-        <div style={styles.section}>
-          <h3 style={styles.subheader}>Item Details</h3>
-          <input type="text" name="items" value={formData.items} style={styles.input} readOnly />
-          <label style={styles.label}>Duration</label>
-          <select name="duration" value={formData.duration} onChange={handleChange} style={styles.input}>
+        <div>
+          <h3 className="text-lg font-medium text-gray-700 mb-4">Item Details</h3>
+          <input
+            type="text"
+            name="items"
+            value={formData.items}
+            className="w-full p-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-50"
+            readOnly
+          />
+          <label className="block mt-4 text-sm font-medium text-gray-700">Duration</label>
+          <select
+            name="duration"
+            value={formData.duration}
+            onChange={handleChange}
+            className="w-full p-2.5 mt-1 border border-gray-300 rounded-md text-gray-900 bg-gray-50"
+          >
             <option value="1 Month">1 Month</option>
             <option value="6 Months">6 Months</option>
             <option value="1 Year">1 Year</option>
           </select>
-          <label style={styles.label}>Amount</label>
-          <input type="text" name="amount" value={formData.amount} style={styles.input} readOnly />
+          <label className="block mt-4 text-sm font-medium text-gray-700">Amount</label>
+          <input
+            type="text"
+            name="amount"
+            value={formData.amount}
+            className="w-full p-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-50"
+            readOnly
+          />
         </div>
 
-        <div style={styles.section}>
-          <h3 style={styles.subheader}>Customer Details</h3>
-          <input type="text" name="first_name" value={formData.first_name} onChange={handleChange} placeholder="First Name" style={styles.input} required />
-          <input type="text" name="last_name" value={formData.last_name} onChange={handleChange} placeholder="Last Name" style={styles.input} required />
-          <input type="text" name="company_name" value={formData.company_name} onChange={handleChange} placeholder="Company Name" style={styles.input} />
-          <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" style={styles.input} required />
-          <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone" style={styles.input} required />
-          <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Address" style={styles.input} required />
-          <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder="City" style={styles.input} required />
+        <div>
+          <h3 className="text-lg font-medium text-gray-700 mb-4">Customer Details</h3>
+          <input
+            type="text"
+            name="first_name"
+            value={formData.first_name}
+            onChange={handleChange}
+            placeholder="First Name"
+            className="w-full p-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-50 mb-4"
+            required
+          />
+          <input
+            type="text"
+            name="last_name"
+            value={formData.last_name}
+            onChange={handleChange}
+            placeholder="Last Name"
+            className="w-full p-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-50 mb-4"
+            required
+          />
+          <input
+            type="text"
+            name="company_name"
+            value={formData.company_name}
+            onChange={handleChange}
+            placeholder="Company Name"
+            className="w-full p-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-50 mb-4"
+          />
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email"
+            className="w-full p-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-50 mb-4"
+            required
+          />
+          <input
+            type="text"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            placeholder="Phone"
+            className="w-full p-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-50 mb-4"
+            required
+          />
+          <input
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            placeholder="Address"
+            className="w-full p-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-50 mb-4"
+            required
+          />
+          <input
+            type="text"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            placeholder="City"
+            className="w-full p-2.5 border border-gray-300 rounded-md text-gray-900 bg-gray-50 mb-4"
+            required
+          />
         </div>
 
-        <input type="submit" value="Buy Now" style={styles.button} />
+        <button type="submit" className="w-full py-2.5 bg-blue-600 text-white rounded-md shadow-md">
+          Buy Now
+        </button>
       </form>
     </div>
   );
