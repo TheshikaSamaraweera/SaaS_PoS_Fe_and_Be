@@ -1,4 +1,3 @@
-// src/app/payment/page.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -6,22 +5,27 @@ import md5 from 'crypto-js/md5';
 import axios from 'axios';
 
 const Payment: React.FC = () => {
-  let merchantSecret = 'MTQ3ODc3NzEwNTI5NDE3ODA4MDkyNjg3NTkwNzg3Mzk3MTYxMjky';
-  let merchantId = '1225182';
+  let merchantSecret = 'MTkzMDgyNDE2NDIwNzQyNTk4MDczNTExODk4NTI4Mzk5NjYzNjk4Mw==';
+  let merchantId = '1227456';
   let orderId = '12345';
   let hashedSecret = md5(merchantSecret).toString().toUpperCase();
+  let amount = '1000.00';
+  let amountFormatted = parseFloat(amount)
+    .toLocaleString('en-us', { minimumFractionDigits: 2 })
+    .replaceAll(',', '');
   let currency = 'LKR';
+  let hash = md5(merchantId + orderId + amountFormatted + currency + hashedSecret).toString().toUpperCase();
 
   const [formData, setFormData] = useState({
-    merchant_id: merchantId,
-    return_url: 'http://localhost:4203',
+    merchant_id: '1227456',
+    return_url: 'http://localhost:4000/register',
     cancel_url: 'http://localhost:4203',
     notify_url: 'http://localhost:4203',
-    order_id: orderId,
-    items: 'Pos Application',
-    currency: currency,
+    order_id: '12345',
+    items: 'Pos Aplication',
+    currency: 'LKR',
     recurrence: '1 Month',
-    duration: '1 Month',
+    duration: 'Forever',
     amount: '1000.00',
     first_name: '',
     last_name: '',
@@ -31,7 +35,7 @@ const Payment: React.FC = () => {
     address: '',
     city: '',
     country: 'Sri Lanka',
-    hash: '',
+    hash: hash,
   });
 
   useEffect(() => {
@@ -77,8 +81,25 @@ const Payment: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      // Send form data to your backend
       const response = await axios.post('http://localhost:3000/payment', formData);
-      console.log('Payment successful:', response.data);
+      console.log('Payment request sent to backend:', response.data);
+
+      // Redirect to PayHere checkout page
+      const payHereForm = document.createElement('form');
+      payHereForm.method = 'POST';
+      payHereForm.action = 'https://sandbox.payhere.lk/pay/checkout';
+
+      Object.keys(formData).forEach((key) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = formData[key as keyof typeof formData];
+        payHereForm.appendChild(input);
+      });
+
+      document.body.appendChild(payHereForm);
+      payHereForm.submit();
     } catch (error) {
       console.error('Payment failed:', error);
     }
@@ -157,7 +178,7 @@ const styles = {
   },
   input: {
     padding: '10px',
-    marginBottom: '15px', // Adjusted margin for better spacing
+    marginBottom: '15px',
     border: '1px solid #ddd',
     borderRadius: '4px',
     fontSize: '16px',
