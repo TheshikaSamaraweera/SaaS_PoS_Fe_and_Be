@@ -13,7 +13,6 @@ interface BillDetails {
   billId: string;
   cashierId: string;
   branchId: string;
-  companyId: string;
   items: BillItem[];
   totalAmount: number;
 }
@@ -55,7 +54,6 @@ const BillProcess: React.FC<BillProcessProps> = ({
           billId: billDetails.billId,
           cashierId: billDetails.cashierId,
           branchId: billDetails.branchId,
-          companyId: billDetails.companyId,
           items: billDetails.items.map((item) => ({
             itemName: item.label,
             unitPrice: item.amount,
@@ -165,9 +163,6 @@ const BillProcess: React.FC<BillProcessProps> = ({
         </p>
         <p>
           <strong>Branch ID:</strong> {userDetails?.lastName}
-        </p>
-        <p>
-          <strong>Company ID:</strong> {userDetails?.firstName}
         </p>
         <table className="bill-table">
           <thead>

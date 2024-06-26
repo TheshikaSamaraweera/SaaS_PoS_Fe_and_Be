@@ -1,28 +1,32 @@
-// src/app/payment/page.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import md5 from 'crypto-js/md5';
 import axios from 'axios';
-import { FaCreditCard } from 'react-icons/fa';
+
 
 const Payment: React.FC = () => {
-  let merchantSecret = 'MTQ3ODc3NzEwNTI5NDE3ODA4MDkyNjg3NTkwNzg3Mzk3MTYxMjky';
-  let merchantId = '1225182';
+  let merchantSecret = 'MTkzMDgyNDE2NDIwNzQyNTk4MDczNTExODk4NTI4Mzk5NjYzNjk4Mw==';
+  let merchantId = '1227456';
   let orderId = '12345';
   let hashedSecret = md5(merchantSecret).toString().toUpperCase();
+  let amount = '1000.00';
+  let amountFormatted = parseFloat(amount)
+    .toLocaleString('en-us', { minimumFractionDigits: 2 })
+    .replaceAll(',', '');
   let currency = 'LKR';
+  let hash = md5(merchantId + orderId + amountFormatted + currency + hashedSecret).toString().toUpperCase();
 
   const [formData, setFormData] = useState({
-    merchant_id: merchantId,
-    return_url: 'http://localhost:4203',
+    merchant_id: '1227456',
+    return_url: 'http://localhost:4000/register',
     cancel_url: 'http://localhost:4203',
     notify_url: 'http://localhost:4203',
-    order_id: orderId,
-    items: 'Pos Application',
-    currency: currency,
+    order_id: '12345',
+    items: 'Pos Aplication',
+    currency: 'LKR',
     recurrence: '1 Month',
-    duration: '1 Month',
+    duration: 'Forever',
     amount: '1000.00',
     first_name: '',
     last_name: '',
@@ -32,7 +36,7 @@ const Payment: React.FC = () => {
     address: '',
     city: '',
     country: 'Sri Lanka',
-    hash: '',
+    hash: hash,
   });
 
   useEffect(() => {
@@ -78,8 +82,25 @@ const Payment: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      // Send form data to your backend
       const response = await axios.post('http://localhost:3000/payment', formData);
-      console.log('Payment successful:', response.data);
+      console.log('Payment request sent to backend:', response.data);
+
+      // Redirect to PayHere checkout page
+      const payHereForm = document.createElement('form');
+      payHereForm.method = 'POST';
+      payHereForm.action = 'https://sandbox.payhere.lk/pay/checkout';
+
+      Object.keys(formData).forEach((key) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = formData[key as keyof typeof formData];
+        payHereForm.appendChild(input);
+      });
+
+      document.body.appendChild(payHereForm);
+      payHereForm.submit();
     } catch (error) {
       console.error('Payment failed:', error);
     }
@@ -89,7 +110,7 @@ const Payment: React.FC = () => {
     <div className="max-w-lg mx-auto mt-12 p-6 bg-gray-100 shadow-md rounded-lg">
       <div className="flex items-center justify-center mb-6">
         <h2 className="text-2xl font-semibold text-gray-800 mr-2">Pay for Your App</h2>
-        <FaCreditCard className="text-xl text-gray-800" />
+        {/* <FaCreditCard className="text-xl text-gray-800" /> */}
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col space-y-6">
         <input type="hidden" name="merchant_id" value={formData.merchant_id} />
@@ -202,6 +223,53 @@ const Payment: React.FC = () => {
       </form>
     </div>
   );
+};
+
+const styles = {
+  container: {
+    maxWidth: '600px',
+    margin: '50px auto',
+    padding: '20px',
+    backgroundColor: '#fff',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    borderRadius: '8px',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  header: {
+    textAlign: 'center',
+    color: '#333',
+  },
+  section: {
+    marginBottom: '20px',
+  },
+  subheader: {
+    marginBottom: '10px',
+    color: '#555',
+  },
+  label: {
+    marginBottom: '5px',
+    color: '#555',
+  },
+  input: {
+    padding: '10px',
+    marginBottom: '15px',
+    border: '1px solid #ddd',
+    borderRadius: '4px',
+    fontSize: '16px',
+    width: '100%',
+  },
+  button: {
+    padding: '10px',
+    backgroundColor: '#28a745',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '16px',
+  },
 };
 
 export default Payment;
