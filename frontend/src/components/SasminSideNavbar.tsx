@@ -17,21 +17,26 @@ import {
   UserPlus,
   ClipboardList,
   File,
-
-  
 } from "lucide-react";
 import { Button } from "./ui/button";
 
 import { useWindowWidth } from "@react-hook/window-size";
+import { UserRoleCard } from "./user-role-card";
 
 export default function SideNavbar({}: Props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [showUserRoleCard, setShowUserRoleCard] = useState(true);
 
   const onlyWidth = useWindowWidth();
   const mobileWidth = onlyWidth < 768;
 
   function toggleSidebar() {
     setIsCollapsed(!isCollapsed);
+    setShowUserRoleCard(!showUserRoleCard);
+  }
+
+  function toggleUserRoleCard() {
+    setShowUserRoleCard(!showUserRoleCard);
   }
 
   return (
@@ -47,28 +52,29 @@ export default function SideNavbar({}: Props) {
           </Button>
         </div>
       )}
+
+      {UserRoleCard && ( // Step 3
+        <div>
+          <UserRoleCard />
+        </div>
+      )}
       <Nav
         isCollapsed={mobileWidth ? true : isCollapsed}
         links={[
           {
             title: "Dashboard",
-            href: "/superAdmin/dashboard",
+            href: "/super-admin/dashboard",
             icon: LayoutDashboard,
-            variant: "default"
+            variant: "default",
           },
-                    
+
           {
-            title: "Branches",
-            href: "/superAdmin/branchManagement",
+            title: "Section Managment",
+            href: "https://dashboard.clerk.com/apps/app_2iKRQ4sWVfr9GhY4Omd4TU1zhwv/instances/ins_2iKRQCwbo4DD3ii8aJDQ78HBu7W",
             icon: Calculator,
-            variant: "ghost"
+            variant: "ghost",
           },
-          {
-            title: "Managers",
-            href: "/superAdmin/managerManagement",
-            icon: ClipboardList,
-            variant: "ghost"
-          },
+         
         ]}
       />
     </div>

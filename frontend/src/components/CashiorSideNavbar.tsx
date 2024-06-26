@@ -22,15 +22,22 @@ import {
 import { Button } from "./ui/button";
 
 import { useWindowWidth } from "@react-hook/window-size";
+import { UserRoleCard } from "./user-role-card";
 
 export default function SideNavbar({}: Props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [showUserRoleCard, setShowUserRoleCard] = useState(true);
 
   const onlyWidth = useWindowWidth();
   const mobileWidth = onlyWidth < 768;
 
   function toggleSidebar() {
     setIsCollapsed(!isCollapsed);
+    setShowUserRoleCard(!showUserRoleCard);
+  }
+
+  function toggleUserRoleCard() {
+    setShowUserRoleCard(!showUserRoleCard);
   }
 
   return (
@@ -44,6 +51,11 @@ export default function SideNavbar({}: Props) {
           >
             <ChevronRight />
           </Button>
+        </div>
+      )}
+      {showUserRoleCard && ( // Step 3
+        <div>
+          <UserRoleCard />
         </div>
       )}
       <Nav
