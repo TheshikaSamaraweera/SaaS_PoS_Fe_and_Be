@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import md5 from 'crypto-js/md5';
 import axios from 'axios';
-import { FaCreditCard } from 'react-icons/fa';
+
 
 const Payment: React.FC = () => {
   let merchantSecret = 'MTkzMDgyNDE2NDIwNzQyNTk4MDczNTExODk4NTI4Mzk5NjYzNjk4Mw==';
@@ -110,7 +110,7 @@ const Payment: React.FC = () => {
     <div className="max-w-lg mx-auto mt-12 p-6 bg-gray-100 shadow-md rounded-lg">
       <div className="flex items-center justify-center mb-6">
         <h2 className="text-2xl font-semibold text-gray-800 mr-2">Pay for Your App</h2>
-        <FaCreditCard className="text-xl text-gray-800" />
+        {/* <FaCreditCard className="text-xl text-gray-800" /> */}
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col space-y-6">
         <input type="hidden" name="merchant_id" value={formData.merchant_id} />
