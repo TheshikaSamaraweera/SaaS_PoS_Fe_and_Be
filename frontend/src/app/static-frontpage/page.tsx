@@ -40,7 +40,7 @@ export default function Home() {
   <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left">
     <h1 className="text-4xl font-bold">Create Your SaaS Application</h1>
     <p className="text-lg max-w-xl text-gray-700 mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam et ex in lacus tincidunt finibus. Donec auctor erat a nunc sodales, vitae vestibulum dolor placerat.</p>
-    <a href="#" className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg shadow-md mt-6 transition duration-300 ease-in-out">Get Started</a>
+    <a href="/payment" className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg shadow-md mt-6 transition duration-300 ease-in-out">Get Started</a>
   </div>
   <div className="flex-1 mt-6 md:mt-0">
     <img src="/images/3.png" alt="SaaS Application" className="w-full h-auto rounded-lg shadow-md transform transition duration-300 hover:scale-105" />
