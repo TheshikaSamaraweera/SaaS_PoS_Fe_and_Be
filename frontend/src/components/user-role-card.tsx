@@ -18,10 +18,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useState, useEffect } from 'react';
 import { UserButton } from "@clerk/nextjs";
 import { useUser } from '@clerk/nextjs';
 
 export function UserRoleCard() {
+  const [userDetails, setUserDetails] = useState<{ firstName: string, lastName: string, userName: string } | null>(null);
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (user) {
+      const { firstName, lastName, username } = user;
+      setUserDetails({
+        firstName: firstName || '',
+        lastName: lastName || '',
+        userName: username || ''
+      });
+      console.log('User Details:', { firstName: firstName || '', lastName: lastName || '', userName: username || '' });
+    }
+  }, [user]);
+
   return (
     <Card className="w-[175px] h-24">
       <CardHeader className="grid grid-cols-2 items-center">
@@ -29,8 +45,8 @@ export function UserRoleCard() {
           <UserButton afterSignOutUrl="/" />
         </div>
         <div className="text-left">
-          <CardTitle className="text-base">Galle</CardTitle>
-          <CardDescription className="text-sm">Manager</CardDescription>
+          <CardTitle className="text-base">{userDetails?.lastName}</CardTitle>
+          <CardDescription className="text-sm">{userDetails?.userName}</CardDescription>
         </div>
       </CardHeader>
     </Card>

@@ -75,7 +75,7 @@ const RegisterPage = () => {
           }),
         });
 
-        router.push("/");
+        router.back();
       }
     } catch (err) {
       console.error(JSON.stringify(err, null, 2));

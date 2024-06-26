@@ -21,6 +21,7 @@ import {
 import { Button } from "./ui/button";
 
 import { useWindowWidth } from "@react-hook/window-size";
+import { UserRoleCard } from "./user-role-card";
 
 export default function SideNavbar({}: Props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -45,6 +46,12 @@ export default function SideNavbar({}: Props) {
           </Button>
         </div>
       )}
+
+      {UserRoleCard && ( // Step 3
+        <div>
+          <UserRoleCard />
+        </div>
+      )}
       <Nav
         isCollapsed={mobileWidth ? true : isCollapsed}
         links={[
@@ -57,7 +64,7 @@ export default function SideNavbar({}: Props) {
 
           {
             title: "Branches",
-            href: "/super-admin/branchManagement",
+            href: "/register",
             icon: Calculator,
             variant: "ghost",
           },
