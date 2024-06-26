@@ -25,9 +25,8 @@ import { UsersModule } from './users/users.module';
     BranchManagerModule,
     BranchModule,
     RequestModule,
-    CategoriesModule,
-
     UsersModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -17,8 +17,6 @@ import {
   UserPlus,
   ClipboardList,
   File,
-
-  
 } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -52,22 +50,22 @@ export default function SideNavbar({}: Props) {
         links={[
           {
             title: "Dashboard",
-            href: "/superAdmin/dashboard",
+            href: "/super-admin/dashboard",
             icon: LayoutDashboard,
-            variant: "default"
+            variant: "default",
           },
-                    
+
           {
             title: "Branches",
-            href: "/superAdmin/branchManagement",
+            href: "/super-admin/branchManagement",
             icon: Calculator,
-            variant: "ghost"
+            variant: "ghost",
           },
           {
             title: "Managers",
-            href: "/superAdmin/managerManagement",
+            href: "/super-admin/managerManagement",
             icon: ClipboardList,
-            variant: "ghost"
+            variant: "ghost",
           },
         ]}
       />
