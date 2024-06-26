@@ -29,13 +29,11 @@ export default function Home() {
   const [billId, setBillId] = useState(nanoid());
   const [cashierId, setCashierId] = useState("");
   const [branchId, setBranchId] = useState("");
-  const [companyId, setCompanyId] = useState("");
   const [cardData, setCardData] = useState<{ [key: string]: CardProps[] }>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [userDetails, setUserDetails] = useState<{
     firstName: string;
     lastName: string;
-    userName: string;
   } | null>(null);
   const { user } = useUser();
 
@@ -49,15 +47,12 @@ export default function Home() {
       setUserDetails({
         firstName: firstName || "",
         lastName: lastName || "",
-        userName: username || "",
       });
       setCashierId(username || "");
       setBranchId(lastName || "");
-      setCompanyId(firstName || "");
       console.log("User Details:", {
         firstName: firstName || "",
         lastName: lastName || "",
-        userName: username || "",
       });
     }
   }, [user]);
@@ -150,8 +145,6 @@ export default function Home() {
       setCashierId(value);
     } else if (name === "branchId") {
       setBranchId(value);
-    } else if (name === "companyId") {
-      setCompanyId(value);
     }
   };
 
@@ -170,16 +163,14 @@ export default function Home() {
   const resetPos = () => {
     setSelectedItems([]);
     setBillId(nanoid());
-    setCashierId(userDetails?.userName || "");
+    setCashierId(userDetails?.firstName || "");
     setBranchId(userDetails?.lastName || "");
-    setCompanyId(userDetails?.firstName || "");
   };
 
   const billDetails = {
     billId,
     cashierId,
     branchId,
-    companyId,
     items: selectedItems.map((item) => ({
       label: item.label,
       amount: item.amount,
@@ -213,15 +204,6 @@ export default function Home() {
                   <option value="BRN001">BRN001</option>
                   <option value="BRN002">BRN002</option>
                   <option value="BRN003">BRN003</option>
-                </select>
-                <select
-                  name="companyId"
-                  onChange={handleInputChange}
-                  value={companyId}
-                >
-                  <option value="COM001">COM001</option>
-                  <option value="COM002">COM002</option>
-                  <option value="COM003">COM003</option>
                 </select>
               </div>
             </section>

@@ -168,7 +168,6 @@ export default function TableDemo() {
               <TableHead className="w-[100px] font-bold">Customer ID</TableHead>
               <TableHead className="font-bold">Cashier</TableHead>
               <TableHead className="font-bold">Branch</TableHead>
-              <TableHead className="font-bold">Company</TableHead>
               <TableHead className="text-right font-bold">Date</TableHead>
               <TableHead className="text-right font-bold">Time</TableHead>
               <TableHead className="text-right font-bold">Amount</TableHead>
@@ -193,7 +192,6 @@ export default function TableDemo() {
                   </TableCell>
                   <TableCell>{invoice.cashierId}</TableCell>
                   <TableCell>{invoice.branchId}</TableCell>
-                  <TableCell>{invoice.companyId}</TableCell>
                   <TableCell className="text-right">
                     {invoice.billDate
                       ? `${invoice.billDate.slice(
