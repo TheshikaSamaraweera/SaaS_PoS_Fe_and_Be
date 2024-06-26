@@ -63,7 +63,7 @@ export default function SideNavbar({}: Props) {
           },
           {
             title: "Managers",
-            href: "/super-admin/managerManagement",
+            href: "/register",
             icon: ClipboardList,
             variant: "ghost",
           },
