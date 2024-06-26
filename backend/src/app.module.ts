@@ -11,6 +11,7 @@ import { BranchModule } from './branch/branch.module';
 import { RequestModule } from './request/request.module';
 import { CategoriesModule } from './categories/categories.module';
 import { UsersModule } from './users/users.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { UsersModule } from './users/users.module';
     RequestModule,
     UsersModule,
     CategoriesModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

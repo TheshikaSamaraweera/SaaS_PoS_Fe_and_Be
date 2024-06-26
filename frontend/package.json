@@ -12,6 +12,7 @@
   "dependencies": {
     "@clerk/nextjs": "^5.1.6",
     "@hookform/resolvers": "^3.3.4",
+    "@nestjs/common": "^10.3.9",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
@@ -19,7 +20,8 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@react-hook/window-size": "^3.1.1",
     "@tanstack/react-table": "^8.11.3",
-    "axios": "^1.6.8",
+    "@types/axios": "^0.14.0",
+    "axios": "^1.7.2",
     "chromedriver": "^124.0.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
