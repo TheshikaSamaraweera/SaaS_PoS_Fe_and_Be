@@ -45,7 +45,7 @@ export default function Home() {
       <section className="flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-8">
   <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left">
     <h1 className="text-4xl font-bold">Create Your SaaS Application</h1>
-    <p className="text-lg max-w-xl text-gray-700 mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam et ex in lacus tincidunt finibus. Donec auctor erat a nunc sodales, vitae vestibulum dolor placerat.</p>
+    <p className="text-lg max-w-xl text-gray-700 mt-4">Welcome to our cutting-edge SaaS (Software as a Service) POS (Point of Sale) application, designed to streamline your business operations and enhance your overall efficiency. Our application is built with the latest technology to provide a seamless, user-friendly experience that can be customized to meet the unique needs of your business.</p>
     <a href="/payment" className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg shadow-md mt-6 transition duration-300 ease-in-out">Buy Now</a>
   </div>
   <div className="flex-1 mt-6 md:mt-0">
@@ -60,60 +60,41 @@ export default function Home() {
     {/* Feature 1 */}
     <div className="p-6 bg-white rounded-lg shadow-md">
       <img src="/images/1.png" alt="Feature 1" className="w-full h-auto rounded-lg mb-4" />
-      <h3 className="text-xl font-semibold mb-4">Feature 1</h3>
-      <p className="text-lg text-gray-700">Description of feature 1.</p>
+      <h3 className="text-xl font-semibold mb-4">Customizable</h3>
+      <p className="text-lg text-gray-700">Our SaaS POS app allows you to customize various aspects to suit your specific business needs, providing a tailored experience for your operations.</p>
     </div>
     {/* Feature 2 */}
     <div className="p-6 bg-white rounded-lg shadow-md">
       <img src="/images/2.png" alt="Feature 2" className="w-full h-auto rounded-lg mb-4" />
-      <h3 className="text-xl font-semibold mb-4">Feature 2</h3>
-      <p className="text-lg text-gray-700">Description of feature 2.</p>
+      <h3 className="text-xl font-semibold mb-4">User-Friendly</h3>
+      <p className="text-lg text-gray-700">Designed with simplicity in mind, our SaaS POS app offers an intuitive interface that makes it easy for anyone to use, reducing the learning curve for new users.</p>
     </div>
     {/* Feature 3 */}
     <div className="p-6 bg-white rounded-lg shadow-md">
       <img src="/images/2.png" alt="Feature 3" className="w-full h-auto rounded-lg mb-4" />
-      <h3 className="text-xl font-semibold mb-4">Feature 3</h3>
-      <p className="text-lg text-gray-700">Description of feature 3.</p>
+      <h3 className="text-xl font-semibold mb-4">Easy to Manage</h3>
+      <p className="text-lg text-gray-700">With robust management tools, our SaaS POS app simplifies the process of overseeing your business operations, allowing you to focus more on growth and less on day-to-day management.</p>
     </div>
   </div>
 </section>
 <section className="bg-gray-200 py-12">
           <div className="container mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-8">See Our Product in Action</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="relative overflow-hidden rounded-lg shadow-md">
-                <img src="/images/2.png" alt="Image 1" className="w-full h-auto" />
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition duration-300 ease-in-out">
-                  <a href="#" className="text-white text-lg font-semibold">Watch Video</a>
-                </div>
-              </div>
-              <div className="relative overflow-hidden rounded-lg shadow-md">
-                <img src="/image2.jpg" alt="Image 2" className="w-full h-auto" />
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition duration-300 ease-in-out">
-                  <a href="#" className="text-white text-lg font-semibold">View Demo</a>
-                </div>
-              </div>
-              <div className="relative overflow-hidden rounded-lg shadow-md">
-                <img src="/image3.jpg" alt="Image 3" className="w-full h-auto" />
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition duration-300 ease-in-out">
-                  <a href="#" className="text-white text-lg font-semibold">Learn More</a>
-                </div>
-              </div>
+           
             </div>
             <div className="mt-12">
               <h3 className="text-2xl font-bold text-center mb-4">About Our Company</h3>
               <p className="text-lg text-center max-w-3xl mx-auto text-gray-700">
                 We are a leading provider of SaaS POS solutions, dedicated to helping businesses streamline their operations and enhance customer experiences. Our innovative approach and cutting-edge technology have earned us a reputation for excellence in the industry.
               </p>
-            </div>
+            
             <div className="mt-12">
               <h3 className="text-2xl font-bold text-center mb-4">Owner Information</h3>
               <div className="flex flex-col items-center md:flex-row md:justify-center md:space-x-8">
                 <img src="/images/owner.jpeg" alt="John Doe" className="w-32 h-32 rounded-full shadow-md mb-4 md:mb-0" />
                 <p className="text-lg text-center md:text-left text-gray-700">
-                  <strong>John Doe</strong> - Founder & CEO
+                  <strong>Charuka Samarakoon</strong> - Founder & CEO
                   <br />
-                  With over 20 years of experience in the tech industry, John Doe has a passion for innovation and a vision for transforming the way businesses operate through technology.
+                  With over 4 years of experience in the tech industry, Charuka Samarakoon has a passion for innovation and a vision for transforming the way businesses operate through technology.
                 </p>
               </div>
             </div>
