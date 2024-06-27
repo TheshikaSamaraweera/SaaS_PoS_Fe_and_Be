@@ -75,13 +75,6 @@ export default function SideNavbar({}: Props) {
             variant: "default",
           },
           {
-            title: "Items",
-            href: "/manager/inventry",
-            icon: UsersRound,
-            variant: "ghost",
-          },
-
-          {
             title: "Add-branch",
             href: "/manager/add-branch",
             icon: ClipboardList,

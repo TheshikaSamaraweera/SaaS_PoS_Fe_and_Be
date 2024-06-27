@@ -1,249 +1,149 @@
 /** @format */
 "use client";
 
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/DataTable";
+import { ColumnDef } from "@tanstack/react-table";
+import React, { useEffect, useState } from "react";
 import PageTitle from "@/components/PageTitle";
-import { CardContent } from "@/components/Card";
-import axios from "axios";
+import useUserDetails from "@/hooks/useUserDetails";
 
-const formSchema = z.object({
-  itemID: z.string().min(1, { message: "Item ID is required" }),
-  itemName: z.string().min(1, { message: "Item Name is required" }),
-  quantity: z.string().min(1, { message: "Quantity is required" }).regex(/^\d+$/, { message: "Quantity must be a number" }),
-  supply: z.string().min(1, { message: "Supply is required" }),
-  date: z.string().refine(val => !isNaN(Date.parse(val)), { message: "Invalid date" }),
-  unitPrice: z.string().min(1, { message: "Unit Price is required" }).regex(/^\d+(\.\d{1,2})?$/, { message: "Unit Price must be a number with up to two decimal places" }),
-  sellPrice: z.string().min(1, { message: "Sell Price is required" }).regex(/^\d+(\.\d{1,2})?$/, { message: "Sell Price must be a number with up to two decimal places" }),
-  description: z.string().optional(),
-  category: z.string().min(1, { message: "Category is required" }),
-  branchName: z.string().min(1, { message: "Branch Name is required" }), // Add branchName to the form schema
-});
+type Props = {};
+type Inventory = {
+  _id: string;
+  itemID: string;
+  itemName: string;
+  quantity: number;
+  supply: string;
+  date: string;
+  unitPrice: string;
+  sellPrice: string;
+  branchName: string;
+};
 
-export default function Home() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      itemID: "",
-      itemName: "",
-      quantity: "",
-      supply: "",
-      date: "",
-      unitPrice: "",
-      sellPrice: "",
-      description: "",
-      category: "",
-      branchName: "", // Add branchName to the default values
+export default function UsersPage() {
+  const [inventories, setInventories] = useState<Inventory[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const userDetails = useUserDetails();
+
+  const columns: ColumnDef<Inventory>[] = [
+    {
+      accessorKey: "itemID",
+      header: "Item id",
+      cell: ({ row }) => {
+        return (
+          <div className="flex gap-2 items-center">
+            <img
+              className="h-10 w-10"
+              src={`https://api.dicebear.com/7.x/lorelei/svg?seed=${row.getValue(
+                "itemID"
+              )}`}
+              alt="user-image"
+            />
+            <p>{row.getValue("itemID")} </p>
+          </div>
+        );
+      },
     },
-  });
+    {
+      accessorKey: "itemName",
+      header: "Item Name",
+    },
+    {
+      accessorKey: "quantity",
+      header: "Quantity",
+    },
+    {
+      accessorKey: "supply",
+      header: "Supply",
+    },
+    {
+      accessorKey: "date",
+      header: "Date",
+    },
+    {
+      accessorKey: "unitPrice",
+      header: "Unit Price",
+    },
+    {
+      accessorKey: "sellPrice",
+      header: "Sell Price",
+    },
+    {
+      accessorKey: "action",
+      header: "Action",
+      cell: ({ row }) => (
+        <div className="flex gap-2">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+            onClick={() => {
+              if (window.confirm(`Do you want to change details of the ${row.original.itemName}?`)) {
+                window.localStorage.setItem("itemID", row.original._id);
+                window.location.href = "/branch-manager/edit-inventory";
+              }
+            }}
+          >
+            EDIT
+          </button>
+          <button
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+            onClick={async () => {
+              if (window.confirm(`Do you want to delete ${row.original.itemName}?`)) {
+                try {
+                  const response = await fetch(
+                    `http://localhost:3000/inventory/${row.original._id}`,
+                    {
+                      method: "DELETE",
+                    }
+                  );
+                  if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                  }
+                  setInventories(
+                    inventories.filter(
+                      (inventory: Inventory) =>
+                        inventory.itemID !== row.original.itemID
+                    )
+                  );
+                } catch (error) {
+                  console.error("Error deleting inventory item:", error);
+                }
+              }
+            }}
+          >
+            DELETE
+          </button>
+        </div>
+      ),
+    },
+  ];
 
-  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/inventory",
-        values
-      );
-      console.log("Inventory created:", response.data);
-      alert(`${values.itemName} added to inventory successfully!`);
-    } catch (error) {
-      console.error("Error creating inventory:", error);
-      alert("Error adding item to inventory!");
+  useEffect(() => {
+    if (userDetails?.lastName) {
+      fetch("http://localhost:3000/inventory")
+        .then((response) => response.json())
+        .then((data) => setInventories(data));
     }
-  };
+  }, [userDetails]);
+
+  const filteredInventories = inventories.filter(
+    (inventory) =>
+      inventory.branchName === userDetails?.lastName &&
+      `${inventory.itemID} ${inventory.itemName}`
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col gap-5 w-full">
-      <PageTitle title="Add new item" />
-      <section>
-        <main className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <CardContent className="lg:col-span-1 flex items-center justify-center">
-            <div className="flex flex-col items-center justify-center">
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Insert Image"
-                className="w-64 h-64 mb-4"
-              />
-              <p className="text-gray-600 text-center">
-                Click or drag image to upload
-              </p>
-            </div>
-          </CardContent>
-
-          <CardContent className="lg:col-span-2">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(handleSubmit)}
-                className="max-w-md w-full flex flex-col gap-4"
-              >
-                <FormField
-                  control={form.control}
-                  name="itemID"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Item ID</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Item ID" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="itemName"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Item Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Item Name" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="quantity"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Quantity</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Quantity" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="supply"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Supply</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Supply" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="date"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Date</FormLabel>
-                        <FormControl>
-                          <Input type="date" placeholder="Date" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="unitPrice"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Unit Price</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Unit Price" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="sellPrice"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Sell Price</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Sell Price" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Description</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Description" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Category</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Snacks / Baby Products / Fashion / Stationary" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="branchName" // Add the branchName field
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="font-bold">Branch Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Branch Name" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <Button type="submit" className="w-full font-bold">
-                  Submit
-                </Button>
-              </form>
-            </Form>
-          </CardContent>
-        </main>
-      </section>
+      <PageTitle title="Stock / Store" />
+      <input
+        type="text"
+        placeholder="Search by item ID or item name"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="p-2 border border-gray-300 rounded mb-4"
+      />
+      <DataTable columns={columns} data={filteredInventories} />
     </div>
   );
 }
