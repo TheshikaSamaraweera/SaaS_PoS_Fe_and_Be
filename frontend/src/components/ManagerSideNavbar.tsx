@@ -111,6 +111,12 @@ export default function SideNavbar({}: Props) {
             icon: LineChart,
             variant: "ghost",
           },
+          {
+            title: "Registation",
+            href: "/auto-logout",
+            icon: UsersRound,
+            variant: "ghost",
+          },
         ]}
       />
     </div>
