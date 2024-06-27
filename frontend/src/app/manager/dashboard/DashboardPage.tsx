@@ -78,11 +78,6 @@ const DashboardPage = ({ userId }: DashboardPageProps) => {
   return (
     <div className="flex flex-col gap-5 w-full">
       <PageTitle title="Manager Dashboard" />
-      <h1>Hello, {userId}</h1>
-      {/* Use userDetails state to access firstName, lastName, and userName */}
-      <h1>Hello, {userDetails?.firstName}</h1>
-      <h1>Hello, {userDetails?.lastName}</h1>
-      <h1>Hello, {userDetails?.userName}</h1>
       <section className="grid w-full grid-cols-1 gap-4 gap-x-8 transition-all sm:grid-cols-2 xl:grid-cols-4">
         {cardData.map((d, i) => (
           <Card key={i} amount={d.amount} discription={d.discription} icon={d.icon} label={d.label} />

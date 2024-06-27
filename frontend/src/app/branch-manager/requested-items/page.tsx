@@ -12,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Modal from "react-modal";
+import useUserDetails from "@/hooks/useUserDetails";
 
 interface RequestItem {
   companyName: string;
@@ -26,8 +27,10 @@ interface RequestItem {
 
 export default function ShowRequestedItems() {
   const [requestedItems, setRequestedItems] = useState<RequestItem[]>([]);
+  const [filteredItems, setFilteredItems] = useState<RequestItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<RequestItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const userDetails = useUserDetails();
 
   const fetchRequestedItems = async () => {
     try {
@@ -42,6 +45,15 @@ export default function ShowRequestedItems() {
   useEffect(() => {
     fetchRequestedItems();
   }, []);
+
+  useEffect(() => {
+    if (userDetails?.lastName) {
+      const filtered = requestedItems.filter(
+        (item) => item.requestedBranch === userDetails.lastName
+      );
+      setFilteredItems(filtered);
+    }
+  }, [requestedItems, userDetails]);
 
   const handleRowClick = (item: RequestItem) => {
     setSelectedItem(item);
@@ -67,7 +79,7 @@ export default function ShowRequestedItems() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {requestedItems.map((item, index) => (
+          {filteredItems.map((item, index) => (
             <TableRow
               key={index}
               className={index % 2 === 0 ? "black-100" : "black-200"}

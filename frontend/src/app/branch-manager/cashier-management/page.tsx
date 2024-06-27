@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import Router, { useRouter } from "next/router";
 import { DataTable } from "@/components/DataTable";
 import PageTitle from "@/components/PageTitle";
+import useUserDetails from "@/hooks/useUserDetails";
 
 type Cashier = {
   _id: string;
@@ -19,9 +20,9 @@ type Cashier = {
 
 type Props = {};
 export default function UsersPage({}: Props) {
-  //const router = useRouter();
   const [cashiers, setCashiers] = useState<Cashier[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const userDetails = useUserDetails();
   
   const columns: ColumnDef<Cashier>[] = [
     {
@@ -109,10 +110,17 @@ export default function UsersPage({}: Props) {
   ];
 
   useEffect(() => {
-    fetch("http://localhost:3000/cashier")
-      .then((response) => response.json())
-      .then((data) => setCashiers(data));
-  }, []);
+    if (userDetails?.lastName) {
+      fetch("http://localhost:3000/cashier")
+        .then((response) => response.json())
+        .then((data) => {
+          const filteredCashiers = data.filter(
+            (cashier: Cashier) => cashier.cashierBranch === userDetails.lastName
+          );
+          setCashiers(filteredCashiers);
+        });
+    }
+  }, [userDetails?.lastName]);
 
   const filteredCashiers = cashiers.filter((cashier) =>
     `${cashier.cashierFirstName} ${cashier.cashierLastName} ${cashier.cashierId}`
@@ -121,8 +129,9 @@ export default function UsersPage({}: Props) {
   );
 
   return (
-    <div className="flex flex-col gap-5  w-full">
+    <div className="flex flex-col gap-5 w-full">
       <PageTitle title="Manage Cashiers" />
+      {userDetails?.lastName}
       <input
         type="text"
         placeholder="Search by first name, last name, or cashier ID"

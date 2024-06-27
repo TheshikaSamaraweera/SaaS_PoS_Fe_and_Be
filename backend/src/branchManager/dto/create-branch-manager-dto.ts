@@ -28,5 +28,5 @@ export class CreateBranchManagerDto {
 
   @IsNotEmpty()
   @IsString()
-  branch: Types.ObjectId;
+  branchManagerBranch: string;
 }

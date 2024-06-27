@@ -1,6 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,33 +13,31 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 import PageTitle from "@/components/PageTitle";
 import { CardContent } from "@/components/Card";
 import axios from "axios";
 
-// Enhanced validation schema
 const formSchema = z.object({
-  branchManagerId: z.string(),
-  branchManagerFirstName: z.string().nonempty("First name is required"),
-  branchManagerLastName: z.string().nonempty("Last name is required"),
-  branchManagerEmail: z.string().email("Invalid email address"),
-  branchManagerAddress: z.string().nonempty("Address is required"),
-  branchManagerPhone: z.string().regex(/^\d{10}$/, "Phone number must be exactly 10 digits"),
-  branchManagerDoB: z.string().nonempty("Date of birth is required"),
-  branchManagerGender: z.enum(["Male", "Female", "Other"], {
-    required_error: "Gender is required",
-  }),
-  branchManagerBranch: z.string().nonempty("Branch is required"),
+  branchManagerId: z.string().nonempty({ message: "ID is required" }),
+  branchManagerFirstName: z
+    .string()
+    .nonempty({ message: "First name is required" }),
+  branchManagerLastName: z
+    .string()
+    .nonempty({ message: "Last name is required" }),
+  branchManagerEmail: z.string().email({ message: "Invalid email address" }),
+  branchManagerAddress: z.string().nonempty({ message: "Address is required" }),
+  branchManagerPhone: z
+    .string()
+    .regex(/^\d{10}$/, { message: "Phone number must be exactly 10 digits" }),
+  branchManagerDoB: z
+    .string()
+    .nonempty({ message: "Date of birth is required" }),
+  branchManagerGender: z.string().nonempty({ message: "Gender is required" }),
+  branchManagerBranch: z.string().nonempty({ message: "Branch is required" }),
 });
 
-export default function Home() {
-  const [branches, setBranches] = useState<{ _id: string; branchName: string }[]>([]);
+export default function AddBranchManager() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,54 +48,30 @@ export default function Home() {
       branchManagerAddress: "",
       branchManagerPhone: "",
       branchManagerDoB: "",
-      branchManagerGender: undefined,
+      branchManagerGender: "",
       branchManagerBranch: "",
     },
   });
 
-  useEffect(() => {
-    const fetchBranches = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/branch');
-        setBranches(response.data);
-      } catch (error) {
-        console.error('Error fetching branches:', error);
-      }
-    };
-
-    fetchBranches();
-  }, []);
-
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post('http://localhost:3000/branch-manager', values);
-      console.log('Branch Manager added:', response.data);
+      const response = await axios.post(
+        "http://localhost:3000/branch-manager",
+        values
+      );
+      console.log("Branch Manager added:", response.data);
       alert(`${response.data.branchManagerFirstName} added as branch manager`);
     } catch (error) {
-      console.error('Error creating branch manager:', error);
-      alert('Error creating branch manager');
+      console.error("Error creating branch manager:", error);
+      alert("Error creating branch manager");
     }
   };
 
   return (
     <div className="flex flex-col gap-5 w-full">
-      <PageTitle title="Add new Branch Manager" />
+      <PageTitle title="Add New Branch Manager" />
       <section>
         <main className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <CardContent className="lg:col-span-1 flex items-center justify-center">
-            <div className="flex flex-col items-center justify-center">
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Insert Image"
-                className="w-64 h-64 mb-4"
-                aria-placeholder="empty"
-              />
-              <p className="text-gray-600 text-center">
-                Click or drag image to upload
-              </p>
-            </div>
-          </CardContent>
-
           <CardContent className="lg:col-span-2">
             <Form {...form}>
               <form
@@ -110,9 +83,11 @@ export default function Home() {
                   name="branchManagerId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-bold">Branch Manager Id</FormLabel>
+                      <FormLabel className="font-bold">
+                        Branch Manager ID
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="Branch Manager Id" {...field} />
+                        <Input placeholder="Branch Manager ID" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -123,11 +98,11 @@ export default function Home() {
                   name="branchManagerFirstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-bold">Branch Manager First Name</FormLabel>
+                      <FormLabel className="font-bold">First Name</FormLabel>
                       <FormControl>
                         <Input placeholder="First Name" {...field} />
                       </FormControl>
-                      <FormMessage className="text-red-600" />
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -140,7 +115,7 @@ export default function Home() {
                       <FormControl>
                         <Input placeholder="Last Name" {...field} />
                       </FormControl>
-                      <FormMessage className="text-red-600" />
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -149,11 +124,11 @@ export default function Home() {
                   name="branchManagerEmail"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-bold">Branch Manager Email</FormLabel>
+                      <FormLabel className="font-bold">Email</FormLabel>
                       <FormControl>
                         <Input placeholder="Email" {...field} />
                       </FormControl>
-                      <FormMessage className="text-red-600" />
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -162,11 +137,11 @@ export default function Home() {
                   name="branchManagerAddress"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-bold">Branch Manager Address</FormLabel>
+                      <FormLabel className="font-bold">Address</FormLabel>
                       <FormControl>
                         <Input placeholder="Address" {...field} />
                       </FormControl>
-                      <FormMessage className="text-red-600" />
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -175,11 +150,11 @@ export default function Home() {
                   name="branchManagerPhone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-bold">Branch Manager Phone Number</FormLabel>
+                      <FormLabel className="font-bold">Phone Number</FormLabel>
                       <FormControl>
                         <Input placeholder="Phone Number" {...field} />
                       </FormControl>
-                      <FormMessage className="text-red-600" />
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -188,11 +163,15 @@ export default function Home() {
                   name="branchManagerDoB"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-bold">Branch Manager Date of Birth</FormLabel>
+                      <FormLabel className="font-bold">Date of Birth</FormLabel>
                       <FormControl>
-                        <Input type="date" placeholder="Date of Birth" {...field} />
+                        <Input
+                          type="date"
+                          placeholder="Date of Birth"
+                          {...field}
+                        />
                       </FormControl>
-                      <FormMessage className="text-red-600" />
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -201,20 +180,13 @@ export default function Home() {
                   name="branchManagerGender"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-bold">Branch Manager Gender</FormLabel>
+                      <FormLabel className="font-bold">
+                        Branch Manager Gender
+                      </FormLabel>
                       <FormControl>
-                        <Select onValueChange={field.onChange} value={field.value}>
-                          <SelectTrigger>
-                            <Input placeholder="Gender" value={field.value} readOnly />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Male">Male</SelectItem>
-                            <SelectItem value="Female">Female</SelectItem>
-                            <SelectItem value="Other">Other</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <Input placeholder="branchManagerGender" {...field} />
                       </FormControl>
-                      <FormMessage className="text-red-600" />
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -223,25 +195,15 @@ export default function Home() {
                   name="branchManagerBranch"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-bold">Branch Manager Branch</FormLabel>
+                      <FormLabel className="font-bold">Branch</FormLabel>
                       <FormControl>
-                        <Select onValueChange={field.onChange} value={field.value}>
-                          <SelectTrigger>
-                            <Input placeholder="Branch" value={field.value} readOnly />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {branches.map((branch) => (
-                              <SelectItem key={branch._id} value={branch._id}>
-                                {branch.branchName}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <Input placeholder="Branch" {...field} />
                       </FormControl>
-                      <FormMessage className="text-red-600" />
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
+
                 <Button type="submit" className="w-full font-bold">
                   Submit
                 </Button>

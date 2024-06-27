@@ -30,8 +30,8 @@ export class BranchManager extends Document {
   @Prop()
   branchManagerGender: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Branch', required: true })
-  branch: Branch;
+  @Prop()
+  branchManagerBranch: string;
 }
 
 export const BranchManagerSchema = SchemaFactory.createForClass(BranchManager);
