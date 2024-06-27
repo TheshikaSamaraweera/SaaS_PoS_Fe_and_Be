@@ -99,6 +99,12 @@ export default function SideNavbar({}: Props) {
             variant: "ghost",
           },
           {
+            title: "Cashiers",
+            href: "/manager/cashiers",
+            icon: Warehouse,
+            variant: "ghost",
+          },
+          {
             title: "Sells",
             href: "/manager/sels",
             icon: LineChart,

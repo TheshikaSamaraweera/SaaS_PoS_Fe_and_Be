@@ -76,8 +76,6 @@ const RegisterPage = () => {
             email,
           }),
         });
-
-        
       }
     } catch (err) {
       console.error(JSON.stringify(err, null, 2));
@@ -93,7 +91,10 @@ const RegisterPage = () => {
         {!pendingVerification && (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="role" className="block mb-2 text-sm font-medium text-gray-900">
+              <label
+                htmlFor="role"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
                 User Role
               </label>
               <select
@@ -110,7 +111,10 @@ const RegisterPage = () => {
               </select>
             </div>
             <div>
-              <label htmlFor="lastName" className="block mb-2 text-sm font-medium text-gray-900">
+              <label
+                htmlFor="lastName"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
                 Branch Name
               </label>
               <input
@@ -123,7 +127,10 @@ const RegisterPage = () => {
               />
             </div>
             <div>
-              <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">
+              <label
+                htmlFor="username"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
                 User Name
               </label>
               <input
@@ -136,7 +143,10 @@ const RegisterPage = () => {
               />
             </div>
             <div>
-              <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">
+              <label
+                htmlFor="email"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
                 Email Address
               </label>
               <input
@@ -150,7 +160,10 @@ const RegisterPage = () => {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">
+              <label
+                htmlFor="password"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
                 Password
               </label>
               <input

@@ -47,7 +47,7 @@ export function UserRoleCard() {
   }, [user]);
 
   return (
-    <Card className="w-full sm:w-[140px] h-24">
+    <Card className="w-full sm:w-[175px] h-24">
       <CardHeader className="grid grid-cols-1 sm:grid-cols-2 items-center">
         <div>
           <UserButton afterSignOutUrl="/" />
