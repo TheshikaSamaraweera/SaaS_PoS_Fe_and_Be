@@ -56,7 +56,7 @@ export function UserRoleCard() {
           <CardTitle className="text-base">{userDetails?.lastName}</CardTitle>
 
           <CardDescription className="text-sm">
-            {userDetails?.userName}
+            {userDetails?.firstName}
           </CardDescription>
         </div>
       </CardHeader>
