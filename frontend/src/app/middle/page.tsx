@@ -18,6 +18,8 @@ const Middle: React.FC = () => {
         router.push("/branch-manager/dashboard");
       } else if (role === "Cashier") {
         router.push("/cashier/dashboard");
+      }else if (role === "Super Admin") {
+        router.push("/super-admin/dashboard");
       }
     }
   }, [isSignedIn, user, router]);
